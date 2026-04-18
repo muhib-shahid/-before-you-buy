@@ -3,7 +3,7 @@ import { supabase } from './supabaseClient';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-// ✅ Changed: accepts a filters object instead of two separate dates
+// Changed: now accepts filters object instead of separate startDate/endDate
 export const getEvents = async (filters = {}) => {
   try {
     const url = new URL(`${supabaseUrl}/rest/v1/calendar_events`);

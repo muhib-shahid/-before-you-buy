@@ -6,23 +6,22 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [eventType, setEventType] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
       const filters = {};
       if (eventType) filters.eventType = eventType;
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
+      // Optional: keep date range filters if needed later
+      // filters.startDate = '2024-01-01';
+      // filters.endDate = '2025-12-31';
       const { data, error } = await getEvents(filters);
       setLoading(false);
       if (error) setError(error);
       else setEvents(data || []);
     };
     fetchEvents();
-  }, [eventType, startDate, endDate]);
+  }, [eventType]);
 
   if (loading) return <div className="loading-spinner">Loading calendar...</div>;
   if (error) return <div className="error-message">{error}</div>;
@@ -30,9 +29,7 @@ const Calendar = () => {
   return (
     <div className="calendar-page">
       <h1><i className="fas fa-calendar-alt"></i> Upcoming Events</h1>
-      
       <div className="game-filters">
-        {/* Event type dropdown */}
         <select
           value={eventType}
           onChange={(e) => setEventType(e.target.value)}
@@ -47,24 +44,7 @@ const Calendar = () => {
           <option value="sale">Sale</option>
           <option value="mod">Mod</option>
         </select>
-
-        {/* Start date */}
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="filter-input"
-        />
-
-        {/* End date */}
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="filter-input"
-        />
       </div>
-
       <div className="events-list">
         {events.map(event => (
           <div key={event.id} className={`event-item ${event.event_type}`}>
