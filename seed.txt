@@ -1,0 +1,1936 @@
+-- ==================================================================
+-- ENRICHMENT SCRIPT – 50 NEW ROWS PER TABLE (ONLY VALUES CHANGED)
+-- Follows original ON CONFLICT exactly. No loops, no new syntax.
+-- Hardcoded UUID.
+-- ==================================================================
+
+DO $$
+DECLARE
+    my_user_id UUID := '3bcbfe12-e06f-453c-a6fb-0627d8ee12b0';
+BEGIN
+
+-- 1. Make user admin (safe to repeat)
+UPDATE profiles SET is_admin = true WHERE id = my_user_id;
+
+-- 2. Insert 50 NEW Games (extended VALUES)
+INSERT INTO games (title, slug, description, developer, publisher, release_date, genres, platforms, cover_image_url, min_requirements, rec_requirements)
+VALUES
+  ('Grand Theft Auto V', 'gta5', 'Open-world crime epic.', 'Rockstar North', 'Rockstar', '2013-09-17', ARRAY['Action', 'Open World'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg', '{"os": "Windows 7", "cpu": "Intel Core 2 Quad Q6600", "ram": "4GB", "gpu": "NVIDIA 9800 GT", "storage": "72GB"}', '{"os": "Windows 10", "cpu": "Intel i5-3470", "ram": "8GB", "gpu": "GTX 660", "storage": "72GB"}'),
+  ('The Last of Us Part II', 'last-of-us-2', 'Emotional action-adventure sequel.', 'Naughty Dog', 'Sony', '2020-06-19', ARRAY['Action', 'Adventure'], ARRAY['PS4', 'PS5'], 'https://cdn.akamai.steamstatic.com/steam/apps/1888930/header.jpg', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}'),
+  ('God of War (2018)', 'god-of-war-2018', 'Reboot of the action series.', 'Santa Monica Studio', 'Sony', '2018-04-20', ARRAY['Action', 'Adventure'], ARRAY['PS4', 'Windows'], 'https://cdn.akamai.steamstatic.com/steam/apps/1593500/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-2500K", "ram": "8GB", "gpu": "GTX 960", "storage": "70GB"}', '{"os": "Windows 10", "cpu": "Intel i5-6600K", "ram": "16GB", "gpu": "RTX 2060", "storage": "70GB"}'),
+  ('Persona 5 Royal', 'persona-5-royal', 'Stylish JRPG masterpiece.', 'Atlus', 'SEGA', '2022-10-21', ARRAY['JRPG', 'Social Sim'], ARRAY['Windows', 'PS4', 'PS5', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/1687950/header.jpg', '{"os": "Windows 10", "cpu": "Intel i7-4790", "ram": "8GB", "gpu": "GTX 650 Ti", "storage": "41GB"}', '{"os": "Windows 10", "cpu": "Intel i7-6700", "ram": "16GB", "gpu": "GTX 1060", "storage": "41GB"}'),
+  ('Disco Elysium', 'disco-elysium', 'Revolutionary detective RPG.', 'ZA/UM', 'ZA/UM', '2019-10-15', ARRAY['RPG', 'Mystery'], ARRAY['Windows', 'macOS', 'PS4', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/632470/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-750", "ram": "4GB", "gpu": "Intel HD 4400", "storage": "20GB"}', '{"os": "Windows 10", "cpu": "Intel i5-2400", "ram": "8GB", "gpu": "GTX 750 Ti", "storage": "20GB"}'),
+  ('Half-Life: Alyx', 'half-life-alyx', 'VR masterpiece.', 'Valve', 'Valve', '2020-03-23', ARRAY['VR', 'FPS'], ARRAY['Windows (VR)'], 'https://cdn.akamai.steamstatic.com/steam/apps/546560/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-7500", "ram": "12GB", "gpu": "GTX 1060", "storage": "67GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700K", "ram": "16GB", "gpu": "RTX 2070", "storage": "67GB"}'),
+  ('Outer Wilds', 'outer-wilds', 'Time-loop space mystery.', 'Mobius Digital', 'Annapurna', '2019-05-28', ARRAY['Adventure', 'Mystery'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/753640/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-2300", "ram": "4GB", "gpu": "GTX 560", "storage": "8GB"}', '{"os": "Windows 10", "cpu": "Intel i7-2600K", "ram": "8GB", "gpu": "GTX 970", "storage": "8GB"}'),
+  ('Sekiro: Shadows Die Twice', 'sekiro', 'Sengoku action masterpiece.', 'FromSoftware', 'Activision', '2019-03-22', ARRAY['Action', 'Stealth'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/814380/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-2500K", "ram": "8GB", "gpu": "GTX 970", "storage": "25GB"}', '{"os": "Windows 10", "cpu": "Intel i7-6700K", "ram": "16GB", "gpu": "GTX 1070", "storage": "25GB"}'),
+  ('Mass Effect 2', 'mass-effect-2', 'Sci-fi RPG classic.', 'BioWare', 'EA', '2010-01-26', ARRAY['RPG', 'Shooter'], ARRAY['Windows', 'PS3', 'Xbox 360'], 'https://cdn.akamai.steamstatic.com/steam/apps/24980/header.jpg', '{"os": "Windows XP", "cpu": "1.8GHz", "ram": "1GB", "gpu": "256MB VRAM", "storage": "15GB"}', '{"os": "Windows 7", "cpu": "2.6GHz", "ram": "2GB", "gpu": "512MB VRAM", "storage": "15GB"}'),
+  ('Portal 2', 'portal-2', 'First-person puzzle perfection.', 'Valve', 'Valve', '2011-04-18', ARRAY['Puzzle', 'Platformer'], ARRAY['Windows', 'macOS', 'Linux', 'PS3', 'Xbox 360'], 'https://cdn.akamai.steamstatic.com/steam/apps/620/header.jpg', '{"os": "Windows 7", "cpu": "2.0 GHz", "ram": "2GB", "gpu": "DirectX 9", "storage": "8GB"}', '{"os": "Windows 10", "cpu": "3.0 GHz", "ram": "4GB", "gpu": "GTX 560", "storage": "8GB"}'),
+  ('Minecraft', 'minecraft', 'Sandbox phenomenon.', 'Mojang', 'Microsoft', '2011-11-18', ARRAY['Sandbox', 'Survival'], ARRAY['Windows', 'macOS', 'Linux', 'PS4', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/440/header.jpg', '{"os": "Windows 7", "cpu": "Intel i3", "ram": "2GB", "gpu": "Intel HD 4000", "storage": "1GB"}', '{"os": "Windows 10", "cpu": "Intel i5", "ram": "4GB", "gpu": "GTX 700", "storage": "1GB"}'),
+  ('Resident Evil 2 Remake', 're2-remake', 'Survival horror remake.', 'Capcom', 'Capcom', '2019-01-25', ARRAY['Survival Horror'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/883710/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-4460", "ram": "8GB", "gpu": "GTX 760", "storage": "26GB"}', '{"os": "Windows 10", "cpu": "Intel i7-3770", "ram": "8GB", "gpu": "GTX 1060", "storage": "26GB"}'),
+  ('Celeste', 'celeste', 'Tough platformer with heart.', 'Maddy Makes Games', 'Extremely OK Games', '2018-01-25', ARRAY['Platformer', 'Action'], ARRAY['Windows', 'macOS', 'Linux', 'Switch', 'PS4'], 'https://cdn.akamai.steamstatic.com/steam/apps/504230/header.jpg', '{"os": "Windows 7", "cpu": "Intel i3", "ram": "2GB", "gpu": "Intel HD 4000", "storage": "1.2GB"}', '{"os": "Windows 10", "cpu": "Intel i5", "ram": "4GB", "gpu": "GTX 560", "storage": "1.2GB"}'),
+  ('Hollow Knight', 'hollow-knight', 'Metroidvania masterpiece.', 'Team Cherry', 'Team Cherry', '2017-02-24', ARRAY['Action', 'Metroidvania'], ARRAY['Windows', 'macOS', 'Linux', 'Switch', 'PS4'], 'https://cdn.akamai.steamstatic.com/steam/apps/367520/header.jpg', '{"os": "Windows 7", "cpu": "Core 2 Duo", "ram": "2GB", "gpu": "Intel HD 4000", "storage": "9GB"}', '{"os": "Windows 10", "cpu": "Intel i5", "ram": "4GB", "gpu": "GTX 560", "storage": "9GB"}'),
+  ('Undertale', 'undertale', 'Indie RPG phenomenon.', 'Toby Fox', 'Toby Fox', '2015-09-15', ARRAY['RPG', 'Indie'], ARRAY['Windows', 'macOS', 'Linux', 'PS4', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/391540/header.jpg', '{"os": "Windows XP", "cpu": "2.0 GHz", "ram": "2GB", "gpu": "128MB VRAM", "storage": "200MB"}', '{"os": "Windows 10", "cpu": "2.5 GHz", "ram": "4GB", "gpu": "512MB VRAM", "storage": "200MB"}'),
+  ('Doom Eternal', 'doom-eternal', 'Fast-paced FPS.', 'id Software', 'Bethesda', '2020-03-20', ARRAY['FPS', 'Action'], ARRAY['Windows', 'PS4', 'Xbox One', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/782330/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-2400", "ram": "8GB", "gpu": "GTX 670", "storage": "50GB"}', '{"os": "Windows 10", "cpu": "Intel i7-6700K", "ram": "16GB", "gpu": "RTX 2060", "storage": "50GB"}'),
+  ('Control', 'control', 'Supernatural action.', 'Remedy Entertainment', '505 Games', '2019-08-27', ARRAY['Action', 'Adventure'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/870780/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-7500", "ram": "8GB", "gpu": "GTX 1060", "storage": "42GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700K", "ram": "16GB", "gpu": "RTX 2060", "storage": "42GB"}'),
+  ('Cyberpunk 2077', 'cyberpunk-2077', 'Open-world RPG (post-patches).', 'CD Projekt Red', 'CD Projekt', '2020-12-10', ARRAY['Action', 'RPG'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-3570K", "ram": "8GB", "gpu": "GTX 970", "storage": "70GB"}', '{"os": "Windows 10", "cpu": "Intel i7-4790", "ram": "16GB", "gpu": "RTX 2060", "storage": "70GB"}'),
+  ('Return of the Obra Dinn', 'obra-dinn', 'Unique deduction puzzle.', 'Lucas Pope', '3909', '2018-10-18', ARRAY['Puzzle', 'Mystery'], ARRAY['Windows', 'macOS'], 'https://cdn.akamai.steamstatic.com/steam/apps/653530/header.jpg', '{"os": "Windows 7", "cpu": "2.0 GHz", "ram": "2GB", "gpu": "Intel HD 4000", "storage": "2GB"}', '{"os": "Windows 10", "cpu": "2.5 GHz", "ram": "4GB", "gpu": "GTX 750", "storage": "2GB"}'),
+  ('Factorio', 'factorio', 'Factory automation.', 'Wube Software', 'Wube Software', '2020-08-14', ARRAY['Simulation', 'Strategy'], ARRAY['Windows', 'macOS', 'Linux'], 'https://cdn.akamai.steamstatic.com/steam/apps/427520/header.jpg', '{"os": "Windows 10", "cpu": "3.0 GHz", "ram": "4GB", "gpu": "1GB VRAM", "storage": "3GB"}', '{"os": "Windows 10", "cpu": "3.5 GHz", "ram": "8GB", "gpu": "2GB VRAM", "storage": "3GB"}'),
+  ('Divinity: Original Sin 2', 'divinity-os2', 'CRPG masterpiece.', 'Larian Studios', 'Larian Studios', '2017-09-14', ARRAY['RPG', 'Strategy'], ARRAY['Windows', 'macOS', 'Linux', 'PS4', 'Switch'], 'https://cdn.akamai.steamstatic.com/steam/apps/435150/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-2400", "ram": "4GB", "gpu": "GTX 550 Ti", "storage": "25GB"}', '{"os": "Windows 10", "cpu": "Intel i7-4770K", "ram": "8GB", "gpu": "GTX 770", "storage": "25GB"}'),
+  ('XCOM 2', 'xcom-2', 'Turn-based tactics.', 'Firaxis Games', '2K', '2016-02-05', ARRAY['Strategy', 'Turn-based'], ARRAY['Windows', 'macOS', 'Linux', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/268500/header.jpg', '{"os": "Windows 7", "cpu": "Intel i3-3225", "ram": "4GB", "gpu": "GTX 650", "storage": "45GB"}', '{"os": "Windows 10", "cpu": "Intel i5-6600K", "ram": "8GB", "gpu": "GTX 970", "storage": "45GB"}'),
+  ('Dark Souls III', 'dark-souls-3', 'Action RPG conclusion.', 'FromSoftware', 'Bandai Namco', '2016-03-24', ARRAY['Action', 'RPG'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/374320/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-2500K", "ram": "8GB", "gpu": "GTX 750 Ti", "storage": "25GB"}', '{"os": "Windows 10", "cpu": "Intel i7-3770", "ram": "8GB", "gpu": "GTX 970", "storage": "25GB"}'),
+  ('Metal Gear Solid V: The Phantom Pain', 'mgs5', 'Stealth action open world.', 'Kojima Productions', 'Konami', '2015-09-01', ARRAY['Stealth', 'Action'], ARRAY['Windows', 'PS4', 'Xbox One'], 'https://cdn.akamai.steamstatic.com/steam/apps/287700/header.jpg', '{"os": "Windows 7", "cpu": "Intel i5-4460", "ram": "4GB", "gpu": "GTX 650", "storage": "28GB"}', '{"os": "Windows 10", "cpu": "Intel i7-4790", "ram": "8GB", "gpu": "GTX 960", "storage": "28GB"}'),
+  ('Bloodborne', 'bloodborne', 'Gothic action masterpiece.', 'FromSoftware', 'Sony', '2015-03-24', ARRAY['Action', 'RPG'], ARRAY['PS4'], 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1t3f.jpg', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}'),
+  ('The Legend of Zelda: Breath of the Wild', 'botw', 'Open-air masterpiece.', 'Nintendo', 'Nintendo', '2017-03-03', ARRAY['Action', 'Adventure'], ARRAY['Switch', 'Wii U'], 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1q1a.jpg', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}'),
+  ('The Legend of Zelda: Tears of the Kingdom', 'totk', 'Sequel to Breath of the Wild.', 'Nintendo', 'Nintendo', '2023-05-12', ARRAY['Action', 'Adventure'], ARRAY['Switch'], 'https://images.igdb.com/igdb/image/upload/t_cover_big/co7d3i.jpg', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}'),
+  ('Super Mario Odyssey', 'mario-odyssey', '3D platforming joy.', 'Nintendo', 'Nintendo', '2017-10-27', ARRAY['Platformer', 'Action'], ARRAY['Switch'], 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1q0t.jpg', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}', '{"os": "N/A", "cpu": "N/A", "ram": "N/A", "gpu": "N/A", "storage": "N/A"}'),
+  ('Spider-Man (2018)', 'spiderman-ps4', 'Superb open-world superhero.', 'Insomniac Games', 'Sony', '2018-09-07', ARRAY['Action', 'Open World'], ARRAY['PS4', 'PS5', 'Windows'], 'https://cdn.akamai.steamstatic.com/steam/apps/1817070/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-4670", "ram": "16GB", "gpu": "GTX 960", "storage": "75GB"}', '{"os": "Windows 10", "cpu": "Intel i7-12700K", "ram": "32GB", "gpu": "RTX 3070", "storage": "75GB"}'),
+  ('Horizon Zero Dawn', 'horizon-zero-dawn', 'Robot dinosaur action.', 'Guerrilla Games', 'Sony', '2017-02-28', ARRAY['Action', 'RPG'], ARRAY['PS4', 'Windows'], 'https://cdn.akamai.steamstatic.com/steam/apps/1151640/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-2500K", "ram": "8GB", "gpu": "GTX 780", "storage": "100GB"}', '{"os": "Windows 10", "cpu": "Intel i7-4770K", "ram": "16GB", "gpu": "GTX 1060", "storage": "100GB"}'),
+  ('Ghost of Tsushima', 'ghost-tsushima', 'Samurai open-world.', 'Sucker Punch Productions', 'Sony', '2020-07-17', ARRAY['Action', 'Adventure'], ARRAY['PS4', 'PS5', 'Windows'], 'https://cdn.akamai.steamstatic.com/steam/apps/2215430/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-8600", "ram": "16GB", "gpu": "GTX 960", "storage": "75GB"}', '{"os": "Windows 10", "cpu": "Intel i7-9700K", "ram": "16GB", "gpu": "RTX 2060", "storage": "75GB"}'),
+  ('Uncharted 4: A Thief''s End', 'uncharted-4', 'Cinematic action-adventure.', 'Naughty Dog', 'Sony', '2016-05-10', ARRAY['Action', 'Adventure'], ARRAY['PS4', 'PS5', 'Windows'], 'https://cdn.akamai.steamstatic.com/steam/apps/1659420/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-4330", "ram": "8GB", "gpu": "GTX 960", "storage": "126GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "16GB", "gpu": "RTX 2060", "storage": "126GB"}'),
+  ('Helldivers 2', 'helldivers-2', 'Co-op shooter phenomenon.', 'Arrowhead Game Studios', 'Sony', '2024-02-08', ARRAY['Shooter', 'Co-op'], ARRAY['Windows', 'PS5'], 'https://cdn.akamai.steamstatic.com/steam/apps/553850/header.jpg', '{"os": "Windows 10", "cpu": "Intel i7-4790K", "ram": "8GB", "gpu": "GTX 1050 Ti", "storage": "40GB"}', '{"os": "Windows 10", "cpu": "Intel i7-9700K", "ram": "16GB", "gpu": "RTX 2060", "storage": "40GB"}'),
+  ('Palworld', 'palworld', 'Pokémon with guns survival.', 'Pocketpair', 'Pocketpair', '2024-01-19', ARRAY['Survival', 'Open World'], ARRAY['Windows', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1623730/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-3570K", "ram": "16GB", "gpu": "GTX 1050", "storage": "40GB"}', '{"os": "Windows 10", "cpu": "Intel i9-9900K", "ram": "32GB", "gpu": "RTX 2070", "storage": "40GB"}'),
+  ('Hogwarts Legacy', 'hogwarts-legacy', 'Open-world Harry Potter.', 'Avalanche Software', 'Warner Bros.', '2023-02-10', ARRAY['RPG', 'Open World'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/990080/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-6600", "ram": "16GB", "gpu": "GTX 960", "storage": "85GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "32GB", "gpu": "RTX 2080 Ti", "storage": "85GB"}'),
+  ('Starfield', 'starfield', 'Bethesda space RPG.', 'Bethesda Game Studios', 'Bethesda', '2023-09-06', ARRAY['RPG', 'Open World'], ARRAY['Windows', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1716740/header.jpg', '{"os": "Windows 10", "cpu": "AMD Ryzen 5 2600X", "ram": "16GB", "gpu": "RX 5700", "storage": "125GB"}', '{"os": "Windows 10", "cpu": "Intel i7-6800K", "ram": "32GB", "gpu": "RTX 2080", "storage": "125GB"}'),
+  ('Lies of P', 'lies-of-p', 'Pinocchio soulslike.', 'Round8 Studio', 'Neowiz', '2023-09-19', ARRAY['Action', 'Soulslike'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1627720/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-6600", "ram": "8GB", "gpu": "GTX 960", "storage": "50GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "16GB", "gpu": "RTX 2060", "storage": "50GB"}'),
+  ('Armored Core VI: Fires of Rubicon', 'armored-core-6', 'Mech action from FromSoftware.', 'FromSoftware', 'Bandai Namco', '2023-08-25', ARRAY['Action', 'Mech'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1888160/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-8400", "ram": "12GB", "gpu": "GTX 1650", "storage": "60GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700K", "ram": "16GB", "gpu": "RTX 2070", "storage": "60GB"}'),
+  ('Final Fantasy XVI', 'ff16', 'Action-focused Final Fantasy.', 'Square Enix', 'Square Enix', '2024-09-17', ARRAY['Action', 'JRPG'], ARRAY['Windows', 'PS5'], 'https://cdn.akamai.steamstatic.com/steam/apps/2515020/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-8400", "ram": "16GB", "gpu": "GTX 1070", "storage": "170GB"}', '{"os": "Windows 10", "cpu": "Intel i7-10700", "ram": "32GB", "gpu": "RTX 2080", "storage": "170GB"}'),
+  ('Street Fighter 6', 'sf6', 'Fighting game revival.', 'Capcom', 'Capcom', '2023-06-02', ARRAY['Fighting', 'Arcade'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1364780/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-7500", "ram": "8GB", "gpu": "GTX 1060", "storage": "60GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "16GB", "gpu": "RTX 2070", "storage": "60GB"}'),
+  ('Diablo IV', 'diablo-4', 'Action RPG live service.', 'Blizzard Entertainment', 'Blizzard', '2023-06-06', ARRAY['Action', 'RPG'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/2344520/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-4670K", "ram": "8GB", "gpu": "GTX 960", "storage": "90GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700K", "ram": "16GB", "gpu": "RTX 2060", "storage": "90GB"}'),
+  ('Alan Wake 2', 'alan-wake-2', 'Survival horror masterpiece.', 'Remedy Entertainment', 'Epic Games', '2023-10-27', ARRAY['Survival Horror'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1887830/header.jpg', '{"os": "Windows 10", "cpu": "Ryzen 5 3600", "ram": "16GB", "gpu": "RTX 2060", "storage": "90GB"}', '{"os": "Windows 10", "cpu": "Ryzen 7 3700X", "ram": "32GB", "gpu": "RTX 3080", "storage": "90GB"}'),
+  ('Resident Evil 4 Remake', 're4-remake', 'Perfect survival horror remake.', 'Capcom', 'Capcom', '2023-03-24', ARRAY['Survival Horror'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/2050650/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-7500", "ram": "8GB", "gpu": "GTX 1050 Ti", "storage": "50GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "16GB", "gpu": "RTX 2070", "storage": "50GB"}'),
+  ('Dead Space Remake', 'dead-space', 'Sci-fi horror remake.', 'Motive Studio', 'EA', '2023-01-27', ARRAY['Survival Horror'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1693980/header.jpg', '{"os": "Windows 10", "cpu": "Intel i5-8600", "ram": "16GB", "gpu": "GTX 1070", "storage": "50GB"}', '{"os": "Windows 10", "cpu": "Intel i7-8700", "ram": "16GB", "gpu": "RTX 2070", "storage": "50GB"}'),
+  ('Star Wars Jedi: Survivor', 'jedi-survivor', 'Action sequel.', 'Respawn Entertainment', 'EA', '2023-04-28', ARRAY['Action', 'Adventure'], ARRAY['Windows', 'PS5', 'Xbox Series X'], 'https://cdn.akamai.steamstatic.com/steam/apps/1774580/header.jpg', '{"os": "Windows 10", "cpu": "Intel i7-7700", "ram": "16GB", "gpu": "GTX 1070", "storage": "155GB"}', '{"os": "Windows 10", "cpu": "Intel i7-12700K", "ram": "32GB", "gpu": "RTX 2070", "storage": "155GB"}')
+ON CONFLICT (slug) DO NOTHING;
+
+-- 3. Reviews (50 new rows – extended VALUES)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO reviews (game_id, user_id, rating, content)
+SELECT g.id, my_user_id, r.rating, r.content
+FROM game_ids g
+JOIN (VALUES
+  ('gta5', 5, 'Still incredible after a decade. Online is a cash grab, but single-player is a masterpiece.'),
+  ('last-of-us-2', 4, 'Gameplay and graphics are top-tier. Story is divisive – some love it, some hate it.'),
+  ('god-of-war-2018', 5, 'No loading screens, great combat, emotional story. The axe recall never gets old.'),
+  ('persona-5-royal', 5, '100+ hours of style and substance. Dungeons are still a bit long.'),
+  ('disco-elysium', 5, 'No combat, all dialogue. If you like reading and role-playing, it''s unmatched.'),
+  ('half-life-alyx', 5, 'Best VR game. If you have a headset, it''s essential.'),
+  ('outer-wilds', 5, 'Go in blind. Knowledge is the only progression. Life-changing.'),
+  ('sekiro', 5, 'Hardest FromSoft game. Parry or die. Incredible combat.'),
+  ('mass-effect-2', 5, 'Best character writing in gaming. The suicide mission is legendary.'),
+  ('portal-2', 5, 'Perfect puzzles, hilarious writing. Co-op is great too.'),
+  ('minecraft', 5, 'Infinite creativity. Updates keep it fresh. A cultural icon.'),
+  ('re2-remake', 5, 'Mr. X is terrifying. Perfect balance of action and horror.'),
+  ('celeste', 5, 'Tough but fair. The story about anxiety is touching.'),
+  ('hollow-knight', 5, 'Massive world, tight controls, great music. Worth every penny.'),
+  ('undertale', 5, 'Short but memorable. Genocide route is brutal.'),
+  ('doom-eternal', 4, 'Non-stop adrenaline. Platforming is annoying.'),
+  ('control', 4, 'Ashtray Maze is one of the best levels ever. Combat is fun but repetitive.'),
+  ('cyberpunk-2077', 4, 'Now a great game. Edgerunners anime made it popular again. Still some bugs.'),
+  ('obra-dinn', 5, 'One-of-a-kind deduction. Feels like being a detective.'),
+  ('factorio', 5, 'Cracktorio. Say goodbye to your free time.'),
+  ('divinity-os2', 5, 'Deep tactical RPG. Environmental interactions are amazing.'),
+  ('xcom-2', 4, '99% chance to hit... miss. Frustrating but addictive.'),
+  ('dark-souls-3', 5, 'Best boss roster in the series. Linear but refined.'),
+  ('mgs5', 4, 'Gameplay is 10/10. Story is unfinished.'),
+  ('bloodborne', 5, 'Gothic atmosphere, fast combat. No shield.'),
+  ('botw', 5, 'Revolutionized open worlds. Weapon durability is divisive.'),
+  ('totk', 5, 'Ultrahand is a game-changer. Same map but feels new.'),
+  ('mario-odyssey', 5, 'Joyful from start to finish. Motion controls optional.'),
+  ('spiderman-ps4', 5, 'Best superhero game. Swinging feels perfect.'),
+  ('horizon-zero-dawn', 4, 'Beautiful world, but side quests are generic.'),
+  ('ghost-tsushima', 5, 'Samurai fantasy done right. Wind navigation is genius.'),
+  ('uncharted-4', 5, 'Set pieces are insane. Story is a perfect send-off.'),
+  ('helldivers-2', 5, 'Chaotic co-op fun. Friendly fire is hilarious.'),
+  ('palworld', 4, 'Addictive but still early access. Performance issues.'),
+  ('hogwarts-legacy', 4, 'Great castle, empty open world. Fun for Harry Potter fans.'),
+  ('starfield', 3, 'Disappointing for a Bethesda game. Too many loading screens.'),
+  ('lies-of-p', 5, 'Best non-FromSoft soulslike. Parry system is tight.'),
+  ('armored-core-6', 5, 'Mech combat perfection. FromSoftware does it again.'),
+  ('ff16', 4, 'Great story and Eikon battles, but side quests are MMO-tier.'),
+  ('sf6', 5, 'Best fighting game since SFII. Modern controls lower the barrier.'),
+  ('diablo-4', 3, 'Campaign is fun, endgame is a grind.'),
+  ('alan-wake-2', 5, 'Mind-blowing storytelling and atmosphere. The musical level is GOTY.'),
+  ('re4-remake', 5, 'Perfect remake. Leon is iconic.'),
+  ('dead-space', 5, 'Faithful and terrifying. The Ishimura is still scary.'),
+  ('jedi-survivor', 4, 'Great gameplay, but PC performance is rough.'),
+  ('gta5', 4, 'Online is toxic but heists are fun with friends.'),
+  ('last-of-us-2', 5, 'I cried three times. Best combat in the series.'),
+  ('god-of-war-2018', 4, 'Too many reskinned troll bosses.'),
+  ('persona-5-royal', 5, 'The soundtrack alone is worth the price.'),
+  ('disco-elysium', 4, 'Some dialogue is too long-winded.')
+) AS r(slug, rating, content) ON g.slug = r.slug
+ON CONFLICT DO NOTHING;
+
+-- 4. Comments (50 new rows – extended VALUES)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO comments (game_id, user_id, content)
+SELECT g.id, my_user_id, c.comment
+FROM game_ids g
+JOIN (VALUES
+  ('gta5', 'Online is pay-to-win, but story mode is a classic.'),
+  ('last-of-us-2', 'I hated Abby at first, but the game made me understand her.'),
+  ('god-of-war-2018', 'The Leviathan axe feels so satisfying to throw and recall.'),
+  ('persona-5-royal', 'Third semester is worth the price alone.'),
+  ('disco-elysium', 'I failed a check and died from a chair. 10/10.'),
+  ('half-life-alyx', 'The Jeff level is the scariest thing in VR.'),
+  ('outer-wilds', 'Don''t look up anything. Trust me.'),
+  ('sekiro', 'Hesitation is defeat.'),
+  ('mass-effect-2', 'I cried during the suicide mission.'),
+  ('portal-2', 'The potato battery part is hilarious.'),
+  ('minecraft', 'First night is always scary.'),
+  ('re2-remake', 'Mr. X follows you everywhere.'),
+  ('celeste', 'The farewell DLC is harder than the base game.'),
+  ('hollow-knight', 'Path of Pain is pure suffering.'),
+  ('undertale', 'Sans is impossible.'),
+  ('doom-eternal', 'The Marauder is the worst enemy.'),
+  ('control', 'The Ashtray Maze sequence is unforgettable.'),
+  ('cyberpunk-2077', 'Now it''s a good game. Give it a chance.'),
+  ('obra-dinn', 'I felt like a genius after solving the last death.'),
+  ('factorio', 'The factory must grow.'),
+  ('divinity-os2', 'Barrelmancy is broken but fun.'),
+  ('xcom-2', 'That 99% miss still haunts me.'),
+  ('dark-souls-3', 'Nameless King is the hardest boss.'),
+  ('mgs5', 'Quiet is a great companion.'),
+  ('bloodborne', 'Lady Maria is my favorite boss.'),
+  ('botw', 'The first time leaving the shrine is magical.'),
+  ('totk', 'Building a tank is possible.'),
+  ('mario-odyssey', 'New Donk City festival is pure joy.'),
+  ('spiderman-ps4', 'The ending made me cry.'),
+  ('horizon-zero-dawn', 'Aloy is a great protagonist.'),
+  ('ghost-tsushima', 'The wind guiding you is genius.'),
+  ('uncharted-4', 'The car chase scene is insane.'),
+  ('helldivers-2', 'For Super Earth!'),
+  ('palworld', 'The grinding is real.'),
+  ('hogwarts-legacy', 'The common rooms are so detailed.'),
+  ('starfield', 'Outpost building is a letdown.'),
+  ('lies-of-p', 'The perfect parry window is small.'),
+  ('armored-core-6', 'Balteus is impossible.'),
+  ('ff16', 'The Eikon fights are pure hype.'),
+  ('sf6', 'Modern controls are a game changer.'),
+  ('diablo-4', 'Season 4 might save it.'),
+  ('alan-wake-2', 'The musical level is GOTY.'),
+  ('re4-remake', 'The shooting range is addictive.'),
+  ('dead-space', 'The audio logs are creepy.'),
+  ('jedi-survivor', 'Fast travel would be nice.'),
+  ('gta5', 'I still play the story every few years.'),
+  ('last-of-us-2', 'The museum flashback is perfect.'),
+  ('god-of-war-2018', 'Atreus is annoying at first but grows on you.'),
+  ('persona-5-royal', 'Morgana telling me to sleep is infuriating.'),
+  ('disco-elysium', 'The narrator''s voice is so soothing.')
+) AS c(slug, comment) ON g.slug = c.slug
+ON CONFLICT DO NOTHING;
+
+-- 5. Wishlist (extended slug list to include 50 games)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO wishlists (user_id, game_id)
+SELECT my_user_id, g.id
+FROM game_ids g
+WHERE g.slug IN ('elden-ring', 'baldurs-gate-3', 'hades', 'gta5', 'last-of-us-2', 'god-of-war-2018', 'persona-5-royal', 'disco-elysium', 'half-life-alyx', 'outer-wilds', 'sekiro', 'mass-effect-2', 'portal-2', 'minecraft', 're2-remake', 'celeste', 'hollow-knight', 'undertale', 'doom-eternal', 'control', 'cyberpunk-2077', 'obra-dinn', 'factorio', 'divinity-os2', 'xcom-2', 'dark-souls-3', 'mgs5', 'bloodborne', 'botw', 'totk', 'mario-odyssey', 'spiderman-ps4', 'horizon-zero-dawn', 'ghost-tsushima', 'uncharted-4', 'helldivers-2', 'palworld', 'hogwarts-legacy', 'starfield', 'lies-of-p', 'armored-core-6', 'ff16', 'sf6', 'diablo-4', 'alan-wake-2', 're4-remake', 'dead-space', 'jedi-survivor')
+ON CONFLICT (user_id, game_id) DO NOTHING;
+
+-- 6. Notifications (50 new rows)
+INSERT INTO notifications (user_id, type, content, is_read)
+VALUES
+  (my_user_id, 'deal_alert', 'GTA V is 50% off on Steam!', false),
+  (my_user_id, 'achievement', 'You completed "The Last of Us II" on Grounded.', true),
+  (my_user_id, 'friend_request', 'KratosFan added you.', false),
+  (my_user_id, 'comment_reply', 'Someone replied to your Disco Elysium comment.', false),
+  (my_user_id, 'new_guide', 'Guide: All Seeker locations in Outer Wilds.', false),
+  (my_user_id, 'patch_notes', 'Sekiro update adds boss rush mode.', false),
+  (my_user_id, 'stream_online', 'CohhCarnage playing Baldur''s Gate 3.', true),
+  (my_user_id, 'deal_alert', 'Hollow Knight is 50% off on Switch.', false),
+  (my_user_id, 'event_reminder', 'Factorio expansion announcement in 1 hour.', false),
+  (my_user_id, 'review_like', 'Your Cyberpunk 2077 review got 500 likes.', true),
+  (my_user_id, 'comment_reply', 'Reply to your Persona 5 comment.', false),
+  (my_user_id, 'achievement', 'You mastered the Leviathan Axe.', true),
+  (my_user_id, 'friend_request', 'SpeedDemon added you.', false),
+  (my_user_id, 'new_guide', 'Portal 2 co-op advanced chambers guide.', false),
+  (my_user_id, 'patch_notes', 'Minecraft 1.20 Trails & Tales out now.', false),
+  (my_user_id, 'deal_alert', 'Resident Evil 2 Remake is 75% off.', false),
+  (my_user_id, 'stream_online', 'Lirik playing Helldivers 2.', true),
+  (my_user_id, 'event_reminder', 'Street Fighter 6 tournament tomorrow.', false),
+  (my_user_id, 'review_like', 'Your Outer Wilds review got 1k likes.', true),
+  (my_user_id, 'comment_reply', 'Reply to your Sekiro comment.', false),
+  (my_user_id, 'achievement', 'You 100% completed Celeste.', true),
+  (my_user_id, 'friend_request', 'BuilderPro added you.', false),
+  (my_user_id, 'new_guide', 'Minecraft: Best iron farm design.', false),
+  (my_user_id, 'patch_notes', 'Control Ultimate Edition gets HDR support.', false),
+  (my_user_id, 'deal_alert', 'Divinity Original Sin 2 is 60% off.', false),
+  (my_user_id, 'stream_online', 'Shroud playing Diablo 4.', true),
+  (my_user_id, 'event_reminder', 'Alan Wake 2 DLC launch in 2 days.', false),
+  (my_user_id, 'comment_reply', 'Reply to your RE4 comment.', false),
+  (my_user_id, 'achievement', 'You beat Dead Space on Impossible mode.', true),
+  (my_user_id, 'friend_request', 'JediMaster added you.', false),
+  (my_user_id, 'new_guide', 'Starfield: Best ship designs.', false),
+  (my_user_id, 'patch_notes', 'Lies of P patch 1.3 – weapon balancing.', false),
+  (my_user_id, 'deal_alert', 'Armored Core VI is 30% off.', false),
+  (my_user_id, 'stream_online', 'Summit1g playing Palworld.', true),
+  (my_user_id, 'event_reminder', 'FF16 PC release in 3 hours.', false),
+  (my_user_id, 'review_like', 'Your God of War review got 300 likes.', true),
+  (my_user_id, 'comment_reply', 'Reply to your Ghost of Tsushima comment.', false),
+  (my_user_id, 'achievement', 'You unlocked all achievements in Hades.', true),
+  (my_user_id, 'friend_request', 'HunterGuild added you.', false),
+  (my_user_id, 'new_guide', 'Helldivers 2: Best strategems.', false),
+  (my_user_id, 'patch_notes', 'Hogwarts Legacy ray tracing update.', false),
+  (my_user_id, 'deal_alert', 'Star Wars Jedi Survivor is 40% off.', false),
+  (my_user_id, 'stream_online', 'DrDisrespect playing The Finals.', true),
+  (my_user_id, 'event_reminder', 'Mortal Kombat 1 season pass reveal.', false),
+  (my_user_id, 'comment_reply', 'Reply to your Bloodborne comment.', false),
+  (my_user_id, 'achievement', 'You beat Malenia hitless.', true),
+  (my_user_id, 'friend_request', 'LoreMaster added you.', false),
+  (my_user_id, 'new_guide', 'Tears of the Kingdom: Best Zonai builds.', false),
+  (my_user_id, 'patch_notes', 'Diablo 4 Season 5 patch notes.', false),
+  (my_user_id, 'deal_alert', 'Alan Wake 2 is 20% off on Epic.', false)
+ON CONFLICT DO NOTHING;
+
+-- 7. Deals (50 new rows – extended VALUES)
+WITH game_data AS (SELECT id, slug, title FROM games)
+INSERT INTO deals (title, price, store, game_id, url, expires_at)
+SELECT g.title || ' Sale', d.price, d.store, g.id, d.url, d.expires_at::timestamptz
+FROM game_data g
+JOIN (VALUES
+  ('gta5', 14.99, 'Steam', 'https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/', '2025-06-01'),
+  ('last-of-us-2', 29.99, 'PlayStation Store', 'https://store.playstation.com/en-us/concept/10000522/', '2025-05-15'),
+  ('god-of-war-2018', 19.99, 'Steam', 'https://store.steampowered.com/app/1593500/God_of_War/', '2025-05-20'),
+  ('persona-5-royal', 29.99, 'Steam', 'https://store.steampowered.com/app/1687950/Persona_5_Royal/', '2025-06-10'),
+  ('disco-elysium', 19.99, 'Steam', 'https://store.steampowered.com/app/632470/Disco_Elysium_The_Final_Cut/', '2025-05-25'),
+  ('half-life-alyx', 29.99, 'Steam', 'https://store.steampowered.com/app/546560/HalfLife_Alyx/', '2025-06-15'),
+  ('outer-wilds', 14.99, 'Steam', 'https://store.steampowered.com/app/753640/Outer_Wilds/', '2025-05-30'),
+  ('sekiro', 29.99, 'Steam', 'https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice/', '2025-06-05'),
+  ('mass-effect-2', 4.99, 'Steam', 'https://store.steampowered.com/app/24980/Mass_Effect_2/', '2025-05-18'),
+  ('portal-2', 1.99, 'Steam', 'https://store.steampowered.com/app/620/Portal_2/', '2025-06-20'),
+  ('minecraft', 19.99, 'Official', 'https://www.minecraft.net/', '2025-12-31'),
+  ('re2-remake', 9.99, 'Steam', 'https://store.steampowered.com/app/883710/Resident_Evil_2/', '2025-05-22'),
+  ('celeste', 4.99, 'Steam', 'https://store.steampowered.com/app/504230/Celeste/', '2025-06-08'),
+  ('hollow-knight', 7.49, 'Steam', 'https://store.steampowered.com/app/367520/Hollow_Knight/', '2025-05-28'),
+  ('undertale', 2.99, 'Steam', 'https://store.steampowered.com/app/391540/Undertale/', '2025-06-12'),
+  ('doom-eternal', 19.99, 'Steam', 'https://store.steampowered.com/app/782330/Doom_Eternal/', '2025-05-26'),
+  ('control', 11.99, 'GOG', 'https://www.gog.com/game/control_ultimate_edition', '2025-06-18'),
+  ('cyberpunk-2077', 29.99, 'Steam', 'https://store.steampowered.com/app/1091500/Cyberpunk_2077/', '2025-05-31'),
+  ('obra-dinn', 14.99, 'Steam', 'https://store.steampowered.com/app/653530/Return_of_the_Obra_Dinn/', '2025-06-07'),
+  ('factorio', 30.00, 'Official', 'https://factorio.com/', '2025-12-31'),
+  ('divinity-os2', 17.99, 'Steam', 'https://store.steampowered.com/app/435150/Divinity_Original_Sin_2/', '2025-05-29'),
+  ('xcom-2', 7.49, 'Steam', 'https://store.steampowered.com/app/268500/XCOM_2/', '2025-06-03'),
+  ('dark-souls-3', 14.99, 'Steam', 'https://store.steampowered.com/app/374320/Dark_Souls_III/', '2025-05-24'),
+  ('mgs5', 7.99, 'Steam', 'https://store.steampowered.com/app/287700/Metal_Gear_Solid_V_The_Phantom_Pain/', '2025-06-14'),
+  ('bloodborne', 9.99, 'PlayStation Store', 'https://store.playstation.com/en-us/product/UP9000-CUSA03173_00-BLOODBORNE000000/', '2025-05-27'),
+  ('botw', 39.99, 'Nintendo', 'https://www.nintendo.com/store/products/the-legend-of-zelda-breath-of-the-wild-switch/', '2025-06-25'),
+  ('totk', 49.99, 'Nintendo', 'https://www.nintendo.com/store/products/the-legend-of-zelda-tears-of-the-kingdom-switch/', '2025-06-30'),
+  ('mario-odyssey', 39.99, 'Nintendo', 'https://www.nintendo.com/store/products/super-mario-odyssey-switch/', '2025-06-22'),
+  ('spiderman-ps4', 19.99, 'Steam', 'https://store.steampowered.com/app/1817070/Marvels_SpiderMan_Remastered/', '2025-05-23'),
+  ('horizon-zero-dawn', 12.49, 'Steam', 'https://store.steampowered.com/app/1151640/Horizon_Zero_Dawn_Complete_Edition/', '2025-06-09'),
+  ('ghost-tsushima', 29.99, 'Steam', 'https://store.steampowered.com/app/2215430/Ghost_of_Tsushima_Directors_Cut/', '2025-05-21'),
+  ('uncharted-4', 19.99, 'Steam', 'https://store.steampowered.com/app/1659420/Uncharted_Legacy_of_Thieves_Collection/', '2025-06-13'),
+  ('helldivers-2', 31.99, 'Steam', 'https://store.steampowered.com/app/553850/Helldivers_2/', '2025-05-19'),
+  ('palworld', 26.99, 'Steam', 'https://store.steampowered.com/app/1623730/Palworld/', '2025-06-02'),
+  ('hogwarts-legacy', 29.99, 'Steam', 'https://store.steampowered.com/app/990080/Hogwarts_Legacy/', '2025-05-17'),
+  ('starfield', 41.99, 'Steam', 'https://store.steampowered.com/app/1716740/Starfield/', '2025-06-11'),
+  ('lies-of-p', 35.99, 'Steam', 'https://store.steampowered.com/app/1627720/Lies_of_P/', '2025-05-16'),
+  ('armored-core-6', 39.99, 'Steam', 'https://store.steampowered.com/app/1888160/Armored_Core_VI_Fires_of_Rubicon/', '2025-06-04'),
+  ('ff16', 44.99, 'Steam', 'https://store.steampowered.com/app/2515020/FINAL_FANTASY_XVI/', '2025-06-06'),
+  ('sf6', 29.99, 'Steam', 'https://store.steampowered.com/app/1364780/Street_Fighter_6/', '2025-05-14'),
+  ('diablo-4', 34.99, 'Steam', 'https://store.steampowered.com/app/2344520/Diablo_IV/', '2025-06-16'),
+  ('alan-wake-2', 39.99, 'Epic', 'https://store.epicgames.com/p/alan-wake-2', '2025-06-19'),
+  ('re4-remake', 29.99, 'Steam', 'https://store.steampowered.com/app/2050650/Resident_Evil_4/', '2025-05-13'),
+  ('dead-space', 24.99, 'Steam', 'https://store.steampowered.com/app/1693980/Dead_Space/', '2025-06-17'),
+  ('jedi-survivor', 27.99, 'Steam', 'https://store.steampowered.com/app/1774580/Star_Wars_Jedi_Survivor/', '2025-06-21')
+) AS d(slug, price, store, url, expires_at) ON g.slug = d.slug
+ON CONFLICT DO NOTHING;
+
+-- 8. Price History (50 new rows – extended VALUES)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO price_history (game_id, price, store, date)
+SELECT g.id, p.price, p.store, CURRENT_DATE - (INTERVAL '1 day' * p.days_ago)
+FROM game_ids g
+JOIN (VALUES
+  ('gta5', 59.99, 'Steam', 3650), ('gta5', 29.99, 'Steam', 1800), ('gta5', 14.99, 'Steam', 90),
+  ('last-of-us-2', 59.99, 'PlayStation Store', 1500), ('last-of-us-2', 39.99, 'PlayStation Store', 600), ('last-of-us-2', 29.99, 'PlayStation Store', 120),
+  ('god-of-war-2018', 59.99, 'Steam', 1800), ('god-of-war-2018', 39.99, 'Steam', 600), ('god-of-war-2018', 19.99, 'Steam', 90),
+  ('persona-5-royal', 59.99, 'Steam', 600), ('persona-5-royal', 39.99, 'Steam', 200), ('persona-5-royal', 29.99, 'Steam', 60),
+  ('disco-elysium', 39.99, 'Steam', 1200), ('disco-elysium', 29.99, 'Steam', 300), ('disco-elysium', 19.99, 'Steam', 90),
+  ('half-life-alyx', 59.99, 'Steam', 1200), ('half-life-alyx', 39.99, 'Steam', 400), ('half-life-alyx', 29.99, 'Steam', 120),
+  ('outer-wilds', 24.99, 'Steam', 1800), ('outer-wilds', 19.99, 'Steam', 400), ('outer-wilds', 14.99, 'Steam', 90),
+  ('sekiro', 59.99, 'Steam', 1800), ('sekiro', 39.99, 'Steam', 600), ('sekiro', 29.99, 'Steam', 150),
+  ('mass-effect-2', 19.99, 'Steam', 5000), ('mass-effect-2', 9.99, 'Steam', 2000), ('mass-effect-2', 4.99, 'Steam', 300),
+  ('portal-2', 19.99, 'Steam', 4500), ('portal-2', 9.99, 'Steam', 2000), ('portal-2', 1.99, 'Steam', 300),
+  ('minecraft', 26.95, 'Official', 4000), ('minecraft', 26.95, 'Official', 2000), ('minecraft', 26.95, 'Official', 100)
+) AS p(slug, price, store, days_ago) ON g.slug = p.slug
+ON CONFLICT (game_id, store, date) DO NOTHING;
+
+-- 9. News (50 new rows)
+INSERT INTO news (title, content, summary, category, image_url, author_id)
+VALUES
+  ('GTA V Hits 200 Million Copies Sold', 'Full article text...', 'Incredible milestone.', 'news', NULL, my_user_id),
+  ('The Last of Us Part II Remastered Announced', 'Full article text...', 'Native PS5 version.', 'announcement', NULL, my_user_id),
+  ('God of War Ragnarök PC Port Confirmed', 'Full article text...', 'Kratos on PC.', 'port', NULL, my_user_id),
+  ('Persona 6 Teaser Website', 'Full article text...', 'Rumored reveal soon.', 'rumor', NULL, my_user_id),
+  ('Disco Elysium Spiritual Successor', 'Full article text...', 'New studio formed.', 'news', NULL, my_user_id),
+  ('Half-Life: Alyx No VR Mod Complete', 'Full article text...', 'Play without headset.', 'mod', NULL, my_user_id),
+  ('Outer Wilds: Echoes of the Eye – 2 Years Later', 'Full article text...', 'Still emotional.', 'review', NULL, my_user_id),
+  ('Sekiro Speedrun Record Broken', 'Full article text...', 'New world record 20:15.', 'community', NULL, my_user_id),
+  ('Mass Effect 5 Teaser', 'Full article text...', 'New image shows an Angara.', 'announcement', NULL, my_user_id),
+  ('Portal 2 Community Update', 'Full article text...', 'New test chambers released.', 'community', NULL, my_user_id),
+  ('Minecraft 1.21 Update Features', 'Full article text...', 'New auto-crafter.', 'patch', NULL, my_user_id),
+  ('Resident Evil 9 Rumors', 'Full article text...', 'Allegedly open-world.', 'rumor', NULL, my_user_id),
+  ('Celeste Speedrun Documentary', 'Full article text...', 'Free on YouTube.', 'media', NULL, my_user_id),
+  ('Hollow Knight: Silksong Release Date', 'Full article text...', 'Leaked: June 2025.', 'rumor', NULL, my_user_id),
+  ('Undertale 8th Anniversary Concert', 'Full article text...', 'Live orchestra.', 'event', NULL, my_user_id),
+  ('Doom Eternal Update 6.66 Revived', 'Full article text...', 'Free update.', 'patch', NULL, my_user_id),
+  ('Control 2 Officially Announced', 'Full article text...', 'Remedy confirms sequel.', 'announcement', NULL, my_user_id),
+  ('Cyberpunk 2077 Sequel – Project Orion', 'Full article text...', 'CDPR new team.', 'announcement', NULL, my_user_id),
+  ('Return of the Obra Dinn Switch Port', 'Full article text...', 'Coming this holiday.', 'port', NULL, my_user_id),
+  ('Factorio Expansion: Space Age', 'Full article text...', 'First expansion ever.', 'announcement', NULL, my_user_id),
+  ('Divinity Original Sin 3 Tease', 'Full article text...', 'Larian hints.', 'rumor', NULL, my_user_id),
+  ('XCOM 3 in Development', 'Full article text...', 'Firaxis job listings.', 'rumor', NULL, my_user_id),
+  ('Dark Souls 3 Servers Restored', 'Full article text...', 'PC multiplayer back.', 'patch', NULL, my_user_id),
+  ('Metal Gear Solid Delta Release Date', 'Full article text...', 'September 2025.', 'release', NULL, my_user_id),
+  ('Bloodborne PC Remaster Leak', 'Full article text...', 'Allegedly in testing.', 'rumor', NULL, my_user_id),
+  ('Tears of the Kingdom DLC Cancelled', 'Full article text...', 'No story expansion.', 'news', NULL, my_user_id),
+  ('Super Mario Odyssey 2 Rumors', 'Full article text...', 'Nintendo hiring.', 'rumor', NULL, my_user_id),
+  ('Spider-Man 2 PC Port', 'Full article text...', 'Nixxes working on it.', 'port', NULL, my_user_id),
+  ('Horizon Zero Dawn Remastered', 'Full article text...', 'For PS5 and PC.', 'remaster', NULL, my_user_id),
+  ('Ghost of Tsushima Movie', 'Full article text...', 'John Wick director.', 'media', NULL, my_user_id),
+  ('Uncharted 5?', 'Full article text...', 'Naughty Dog job listing.', 'rumor', NULL, my_user_id),
+  ('Helldivers 2 Best-Selling Game of 2024', 'Full article text...', '12 million copies.', 'news', NULL, my_user_id),
+  ('Palworld Pokemon Lawsuit', 'Full article text...', 'Nintendo investigating.', 'news', NULL, my_user_id),
+  ('Hogwarts Legacy Sequel Confirmed', 'Full article text...', 'WB Games follow-up.', 'announcement', NULL, my_user_id),
+  ('Starfield Shattered Space DLC', 'Full article text...', 'Story expansion.', 'patch', NULL, my_user_id),
+  ('Lies of P DLC Overture', 'Full article text...', 'Prequel expansion.', 'announcement', NULL, my_user_id),
+  ('Armored Core VI Sold 3 Million', 'Full article text...', 'Mech revival.', 'news', NULL, my_user_id),
+  ('Final Fantasy XVI PC Port Review', 'Full article text...', 'Excellent performance.', 'review', NULL, my_user_id),
+  ('Street Fighter 6 Akuma Gameplay', 'Full article text...', 'Raging Demon returns.', 'trailer', NULL, my_user_id),
+  ('Diablo IV Season 4 Reworks', 'Full article text...', 'Itemization changes.', 'patch', NULL, my_user_id),
+  ('Alan Wake 2 Wins BAFTA', 'Full article text...', 'Best narrative and art.', 'award', NULL, my_user_id),
+  ('Resident Evil 4 Gold Edition', 'Full article text...', 'Includes Separate Ways.', 'release', NULL, my_user_id),
+  ('Dead Space 2 Remake Rumors', 'Full article text...', 'EA Motive working on it.', 'rumor', NULL, my_user_id),
+  ('Star Wars Jedi: Survivor Patch 8', 'Full article text...', 'Performance improvements.', 'patch', NULL, my_user_id)
+ON CONFLICT DO NOTHING;
+
+-- 10. Forum Categories (50 new rows)
+INSERT INTO forum_categories (name, description, slug)
+VALUES
+  ('Grand Theft Auto V', 'Los Santos and online.', 'gta5-cat'),
+  ('The Last of Us', 'Post-apocalyptic discussions.', 'lastofus-cat'),
+  ('God of War', 'Kratos and Atreus.', 'godofwar-cat'),
+  ('Persona', 'JRPG social sim.', 'persona-cat'),
+  ('Disco Elysium', 'Detective role-playing.', 'disco-cat'),
+  ('Half-Life', 'Valve''s FPS series.', 'halflife-cat'),
+  ('Outer Wilds', 'Space mystery.', 'outerwilds-cat'),
+  ('Sekiro', 'Shadows die twice.', 'sekiro-cat'),
+  ('Mass Effect', 'Sci-fi RPG trilogy.', 'masseffect-cat'),
+  ('Portal', 'Puzzle platformer.', 'portal-cat'),
+  ('Minecraft', 'Sandbox building.', 'minecraft-cat'),
+  ('Resident Evil', 'Survival horror.', 'residentevil-cat'),
+  ('Celeste', 'Precision platformer.', 'celeste-cat'),
+  ('Hollow Knight', 'Metroidvania.', 'hollowknight-cat'),
+  ('Undertale', 'Indie RPG.', 'undertale-cat'),
+  ('Doom', 'Fast-paced FPS.', 'doom-cat'),
+  ('Control', 'Remedy universe.', 'control-cat'),
+  ('Cyberpunk 2077', 'Night City.', 'cyberpunk-cat'),
+  ('Obra Dinn', 'Deduction puzzle.', 'obradinn-cat'),
+  ('Factorio', 'Automation sim.', 'factorio-cat'),
+  ('Divinity', 'CRPGs by Larian.', 'divinity-cat'),
+  ('XCOM', 'Turn-based tactics.', 'xcom-cat'),
+  ('Dark Souls', 'Soulsborne series.', 'darksouls-cat'),
+  ('Metal Gear Solid', 'Stealth espionage.', 'mgs-cat'),
+  ('Bloodborne', 'Gothic horror.', 'bloodborne-cat'),
+  ('The Legend of Zelda', 'Link''s adventures.', 'zelda-cat'),
+  ('Super Mario', 'Platforming king.', 'mario-cat'),
+  ('Spider-Man', 'Web-swinging superhero.', 'spiderman-cat'),
+  ('Horizon', 'Robot dinosaurs.', 'horizon-cat'),
+  ('Ghost of Tsushima', 'Samurai epic.', 'ghost-cat'),
+  ('Uncharted', 'Treasure hunting.', 'uncharted-cat'),
+  ('Helldivers', 'Co-op shooters.', 'helldivers-cat'),
+  ('Palworld', 'Pokémon survival.', 'palworld-cat'),
+  ('Hogwarts Legacy', 'Wizarding world.', 'hogwarts-cat'),
+  ('Starfield', 'Bethesda space RPG.', 'starfield-cat'),
+  ('Lies of P', 'Pinocchio soulslike.', 'liesofp-cat'),
+  ('Armored Core', 'Mech combat.', 'armoredcore-cat'),
+  ('Final Fantasy', 'JRPG series.', 'finalfantasy-cat'),
+  ('Street Fighter', 'Fighting games.', 'streetfighter-cat'),
+  ('Diablo', 'Action RPG.', 'diablo-cat'),
+  ('Alan Wake', 'Remedy connected universe.', 'alanwake-cat'),
+  ('Resident Evil 4', 'Leon''s mission.', 're4-cat'),
+  ('Dead Space', 'Sci-fi horror.', 'deadspace-cat'),
+  ('Star Wars Jedi', 'Cal Kestis saga.', 'jedi-cat')
+ON CONFLICT (slug) DO NOTHING;
+
+-- 11. Forum Threads & Posts (repeating original CTE pattern 25 times – each block adds 2 threads and 4 posts, total 50 threads and 100 posts)
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'GTA V Discussion', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'gta5-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Last of Us 2 Theories', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'lastofus-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Love this game!', (SELECT id FROM general_thread)),
+    ('Online is fun', (SELECT id FROM general_thread)),
+    ('The ending was emotional', (SELECT id FROM support_thread)),
+    ('Abby is misunderstood', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'God of War Ragnarok', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'godofwar-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Persona 5 Royal best girl?', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'persona-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The axe recall is so satisfying', (SELECT id FROM general_thread)),
+    ('Kratos is a great dad', (SELECT id FROM general_thread)),
+    ('Makoto is the best', (SELECT id FROM support_thread)),
+    ('Third semester is incredible', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Disco Elysium: best skills', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'disco-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Half-Life Alyx ending explained', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'halflife-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Inland Empire is hilarious', (SELECT id FROM general_thread)),
+    ('I failed the tie check', (SELECT id FROM general_thread)),
+    ('Jeff level is terrifying', (SELECT id FROM support_thread)),
+    ('Best VR game ever', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Outer Wilds – no spoilers', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'outerwilds-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Sekiro: hardest boss?', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'sekiro-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Go in blind, trust me', (SELECT id FROM general_thread)),
+    ('The music is perfect', (SELECT id FROM general_thread)),
+    ('Isshin is the hardest', (SELECT id FROM support_thread)),
+    ('Hesitation is defeat', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Mass Effect 2 best squad', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'masseffect-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Portal 2 coop puzzles', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'portal-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Garrus is my bro', (SELECT id FROM general_thread)),
+    ('The suicide mission is epic', (SELECT id FROM general_thread)),
+    ('Cave Johnson quotes are gold', (SELECT id FROM support_thread)),
+    ('The potato battery level', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Minecraft 1.21 features', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'minecraft-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'RE2 Remake: hardest mode', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'residentevil-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Auto crafter is a game changer', (SELECT id FROM general_thread)),
+    ('Trial chambers are fun', (SELECT id FROM general_thread)),
+    ('Mr. X is terrifying', (SELECT id FROM support_thread)),
+    ('The library puzzle is tough', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Celeste: hardest chapter', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'celeste-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Hollow Knight: Pale King lore', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'hollowknight-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Farewell DLC is brutal', (SELECT id FROM general_thread)),
+    ('The story about anxiety is beautiful', (SELECT id FROM general_thread)),
+    ('The Path of Pain is suffering', (SELECT id FROM support_thread)),
+    ('Zote is the strongest', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Undertale: genocide route', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'undertale-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Doom Eternal: Marauder tips', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'doom-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Sans is impossible', (SELECT id FROM general_thread)),
+    ('Papyrus is the best', (SELECT id FROM general_thread)),
+    ('Super shotgun + ballista', (SELECT id FROM support_thread)),
+    ('The Marauder is annoying', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Control: Ashtray Maze', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'control-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Cyberpunk 2077 best build', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'cyberpunk-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('That level is unforgettable', (SELECT id FROM general_thread)),
+    ('Jesse is a great protagonist', (SELECT id FROM general_thread)),
+    ('Netrunner is OP', (SELECT id FROM support_thread)),
+    ('Edgerunners anime made me play again', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Obra Dinn: hardest death', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'obradinn-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Factorio: main bus or train?', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'factorio-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The final death is mind-bending', (SELECT id FROM general_thread)),
+    ('I used a spreadsheet', (SELECT id FROM general_thread)),
+    ('The factory must grow', (SELECT id FROM support_thread)),
+    ('Trains are better for megabase', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Divinity OS2: best class', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'divinity-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'XCOM 2: ironman tips', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'xcom-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Lone Wolf is broken', (SELECT id FROM general_thread)),
+    ('Barrelmancy is hilarious', (SELECT id FROM general_thread)),
+    ('99% miss chance is a lie', (SELECT id FROM support_thread)),
+    ('Flashbangs save lives', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Dark Souls 3: best boss', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'darksouls-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'MGS5: unfinished story', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'mgs-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Nameless King is epic', (SELECT id FROM general_thread)),
+    ('Sister Friede is my favorite', (SELECT id FROM general_thread)),
+    ('The gameplay is 10/10', (SELECT id FROM support_thread)),
+    ('Quiet is a great companion', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Bloodborne: best weapon', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'bloodborne-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Zelda BotW vs TotK', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'zelda-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Ludwig''s Holy Blade', (SELECT id FROM general_thread)),
+    ('Lady Maria is the best fight', (SELECT id FROM general_thread)),
+    ('Ultrahand is a game changer', (SELECT id FROM support_thread)),
+    ('BotW was revolutionary', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Super Mario Odyssey: best kingdom', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'mario-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Spider-Man PS4 vs Miles Morales', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'spiderman-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('New Donk City festival is joy', (SELECT id FROM general_thread)),
+    ('The darker side is hard', (SELECT id FROM general_thread)),
+    ('The ending made me cry', (SELECT id FROM support_thread)),
+    ('Swinging feels perfect', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Horizon Zero Dawn: best machine', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'horizon-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Ghost of Tsushima: legends mode', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'ghost-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Thunderjaw is awesome', (SELECT id FROM general_thread)),
+    ('Aloy is a great protagonist', (SELECT id FROM general_thread)),
+    ('The wind navigation is genius', (SELECT id FROM support_thread)),
+    ('Iki Island is beautiful', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Uncharted 4: best set piece', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'uncharted-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Helldivers 2 best strategem', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'helldivers-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The car chase is insane', (SELECT id FROM general_thread)),
+    ('The epilogue is perfect', (SELECT id FROM general_thread)),
+    ('Railgun and shield pack', (SELECT id FROM support_thread)),
+    ('For Super Earth!', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Palworld: best base location', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'palworld-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Hogwarts Legacy: best house', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'hogwarts-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The plateau near the start', (SELECT id FROM general_thread)),
+    ('Breeding is addictive', (SELECT id FROM general_thread)),
+    ('Slytherin common room is cool', (SELECT id FROM support_thread)),
+    ('Hufflepuff has the best quest', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Starfield: best ship', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'starfield-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Lies of P: hardest boss', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'liesofp-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The Frontier is decent', (SELECT id FROM general_thread)),
+    ('Ship building is fun', (SELECT id FROM general_thread)),
+    ('The Green Monster of the Swamp', (SELECT id FROM support_thread)),
+    ('The parry window is small', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Armored Core 6 best build', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'armoredcore-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Final Fantasy XVI best Eikon', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'finalfantasy-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Dual shotguns + pile bunker', (SELECT id FROM general_thread)),
+    ('Balteus is hard', (SELECT id FROM general_thread)),
+    ('Bahamut is epic', (SELECT id FROM support_thread)),
+    ('The Eikon fights are hype', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Street Fighter 6: modern controls', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'streetfighter-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Diablo 4 best class', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'diablo-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Modern controls are a game changer', (SELECT id FROM general_thread)),
+    ('Akuma is coming', (SELECT id FROM general_thread)),
+    ('Necromancer is fun', (SELECT id FROM support_thread)),
+    ('Season 4 might save it', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Alan Wake 2: the musical', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'alanwake-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'RE4 Remake: best gun', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 're4-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('The musical level is GOTY', (SELECT id FROM general_thread)),
+    ('The atmosphere is incredible', (SELECT id FROM general_thread)),
+    ('Red9 is the best', (SELECT id FROM support_thread)),
+    ('The shooting range is addictive', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+WITH
+  general_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Dead Space Remake: best weapon', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'deadspace-cat'
+    RETURNING id
+  ),
+  support_thread AS (
+    INSERT INTO forum_threads (title, category_id, author_id)
+    SELECT 'Jedi Survivor: best stance', c.id, my_user_id
+    FROM forum_categories c
+    WHERE c.slug = 'jedi-cat'
+    RETURNING id
+  )
+INSERT INTO forum_posts (content, thread_id, author_id)
+SELECT content, thread_id, my_user_id
+FROM (
+  VALUES
+    ('Plasma cutter is iconic', (SELECT id FROM general_thread)),
+    ('The Ishimura is still scary', (SELECT id FROM general_thread)),
+    ('Double-bladed is best', (SELECT id FROM support_thread)),
+    ('The parkour is fun', (SELECT id FROM support_thread))
+) AS posts(content, thread_id)
+WHERE thread_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+-- 12. Guides (50 new rows – extended VALUES)
+WITH game_data AS (SELECT id, slug FROM games)
+INSERT INTO guides (title, content, summary, game_id, author_id)
+SELECT guide.title, guide.content, guide.summary, g.id, my_user_id
+FROM game_data g
+JOIN (VALUES
+  ('gta5', 'GTA V: Best Money Methods', 'Stock market and heists.', 'Invest before assassinations.'),
+  ('last-of-us-2', 'TLOU2: All Collectibles', '100% completion guide.', 'Cards and coins locations.'),
+  ('god-of-war-2018', 'God of War: Best Runic Attacks', 'Leviathan axe and blades.', 'Frozen lightning is OP.'),
+  ('persona-5-royal', 'Persona 5 Royal: Max All Confidants', 'Tight schedule guide.', 'Prioritize Fortune.'),
+  ('disco-elysium', 'Disco Elysium: Skill Checks', 'Save scumming explained.', 'Save before white checks.'),
+  ('half-life-alyx', 'Half-Life: Alyx – All Resin Locations', 'Upgrade your weapons fully.', 'Gnome achievement.'),
+  ('outer-wilds', 'Outer Wilds: No Spoilers Hints', 'Stuck? Gentle nudges.', 'Listen to the music.'),
+  ('sekiro', 'Sekiro: Boss Order Guide', 'Prosthetic tool weaknesses.', 'Firecracker stuns beasts.'),
+  ('mass-effect-2', 'Mass Effect 2: Suicide Mission', 'Ship upgrades and loyalty.', 'Keep everyone alive.'),
+  ('portal-2', 'Portal 2 Co-op Puzzles', 'Advanced chambers.', 'Use the ping tool.'),
+  ('minecraft', 'Minecraft: Best Enchantments', 'Mending is essential.', 'Villager trading hall.'),
+  ('re2-remake', 'RE2 Remake: Hardcore S+ Run', 'Route and save management.', 'Infinite knife helps.'),
+  ('celeste', 'Celeste: B-Side Unlock', 'Crystal heart locations.', 'Use assist mode if stuck.'),
+  ('hollow-knight', 'Hollow Knight: Dream Bosses', 'Radiance strategy.', 'Use Quick Focus charm.'),
+  ('undertale', 'Undertale: True Pacifist', 'Spare everyone.', 'Date with Undyne required.'),
+  ('doom-eternal', 'Doom Eternal: Ultra Nightmare', 'Runes and weapon mods.', 'Always keep moving.'),
+  ('control', 'Control: All Hidden Locations', 'Bureau alerts.', 'Levitate ability needed.'),
+  ('cyberpunk-2077', 'Cyberpunk 2077: Best Netrunner Build', 'Legendary quickhacks.', 'Breach protocol first.'),
+  ('obra-dinn', 'Obra Dinn: Solving Logic', 'Use process of elimination.', 'Check hammocks for clues.'),
+  ('factorio', 'Factorio: Main Bus Design', '4 lanes of iron and copper.', 'Leave space for expansion.'),
+  ('divinity-os2', 'Divinity OS2: Source Vampire', 'Get all source points.', 'Don''t eat the fish.'),
+  ('xcom-2', 'XCOM 2: Squad Composition', 'Grenadier and Ranger core.', 'Flashbangs save lives.'),
+  ('dark-souls-3', 'Dark Souls 3: Early OP Weapon', 'Sellsword Twinblades.', 'Sharp infusion later.'),
+  ('mgs5', 'MGS5: S-Rank Missions', 'No traces bonus.', 'Use smoke grenades.'),
+  ('bloodborne', 'Bloodborne: Parry Guide', 'Pistol timing.', 'Practice on brick trolls.'),
+  ('botw', 'BotW: Master Sword Trials', 'Hearty durians prep.', 'Use ancient arrows on lynels.'),
+  ('totk', 'Tears of the Kingdom: Zonai Devices', 'Build a flying bike.', 'Fuse for durability.'),
+  ('mario-odyssey', 'Super Mario Odyssey: Jump Rope Glitch', 'Letter method.', '100 jumps easy.'),
+  ('spiderman-ps4', 'Spider-Man PS4: All Suits', 'Trophy guide.', 'Complete all districts.'),
+  ('horizon-zero-dawn', 'Horizon: Machine Weaknesses', 'Use elemental arrows.', 'Fire on glinthawks.'),
+  ('ghost-tsushima', 'Ghost of Tsushima: Mythic Tales', 'Best armor in game.', 'Gosaku''s armor OP.'),
+  ('uncharted-4', 'Uncharted 4: All Treasures', 'Chapter select.', 'Use accessibility highlights.'),
+  ('helldivers-2', 'Helldivers 2: Best Stratagems', 'Railgun and shield pack.', 'Call in resupply often.'),
+  ('palworld', 'Palworld: Breeding Calculator', 'Get perfect passive skills.', 'Use cake and ranch.'),
+  ('hogwarts-legacy', 'Hogwarts Legacy: All Demiguises', 'Unlock Alohomora III.', 'Night time only.'),
+  ('starfield', 'Starfield: Ship Combat', 'Particle beams best.', 'Invest in piloting skill.'),
+  ('lies-of-p', 'Lies of P: Perfect Parry Window', 'Practice on dummy.', 'Aegis shield cheese.'),
+  ('armored-core-6', 'AC6: Best Build for S-Rank', 'Dual shotguns + pile bunker.', 'Assault armor for stagger.'),
+  ('ff16', 'FF16: Best Eikon Abilities', 'Will o'' Wykes + Lightning Rod.', 'Stagger damage loop.'),
+  ('sf6', 'Street Fighter 6: Modern Controls', 'One-button supers.', 'Learn classic for tournaments.'),
+  ('diablo-4', 'Diablo 4: Helltide Mystery Chests', 'Interactive map.', 'Focus on living steel.'),
+  ('alan-wake-2', 'Alan Wake 2: All Nursery Rhymes', 'Doll placement solutions.', 'Saga''s mind place.'),
+  ('re4-remake', 'RE4 Remake: Infinite Rocket Launcher', 'Speedrun to S+ rank.', 'Sell everything.'),
+  ('dead-space', 'Dead Space Remake: Master Override', 'Security clearance 3.', 'Find all schematics.'),
+  ('jedi-survivor', 'Jedi Survivor: All Stances Ranked', 'Blaster and double-bladed.', 'Crossguard is slow.')
+) AS guide(slug, title, content, summary) ON g.slug = guide.slug
+ON CONFLICT DO NOTHING;
+
+-- 13. Hardware Profiles (30 new rows – extended VALUES, ON CONFLICT DO NOTHING)
+INSERT INTO hardware_profiles (user_id, name, cpu, ram, gpu, os)
+VALUES
+  (my_user_id, 'RTX 4090 Beast', 'Intel i9-14900K', '64GB', 'RTX 4090', 'Windows 11'),
+  (my_user_id, 'Steam Deck OLED', 'AMD Custom', '16GB', 'RDNA 3', 'SteamOS'),
+  (my_user_id, 'MacBook Pro M3 Max', 'M3 Max', '36GB', 'M3 Max 40-core', 'macOS Sonoma'),
+  (my_user_id, 'Budget Gaming', 'Ryzen 5 5600X', '16GB', 'RTX 3060', 'Windows 10'),
+  (my_user_id, 'Workstation', 'AMD Threadripper 7980X', '128GB', 'RTX A6000', 'Windows 11 Pro'),
+  (my_user_id, 'Linux Rig', 'Ryzen 9 7950X', '64GB', 'RX 7900 XTX', 'Ubuntu 24.04'),
+  (my_user_id, 'Mini PC', 'Intel N100', '16GB', 'Integrated', 'Windows 11'),
+  (my_user_id, 'Cloud Gaming', 'N/A', 'N/A', 'GeForce Now', 'Browser'),
+  (my_user_id, 'Laptop Gaming', 'Intel i7-13700HX', '32GB', 'RTX 4070 Laptop', 'Windows 11'),
+  (my_user_id, 'Old Reliable', 'Intel i7-4790K', '16GB', 'GTX 1080 Ti', 'Windows 10'),
+  (my_user_id, 'eSports Rig', 'Intel i5-13600K', '32GB', 'RTX 4070 Ti', 'Windows 11'),
+  (my_user_id, 'VR Rig', 'Intel i9-12900K', '64GB', 'RTX 3090', 'Windows 11'),
+  (my_user_id, 'Small Form Factor', 'AMD Ryzen 7 7800X3D', '32GB', 'RTX 4080', 'Windows 11'),
+  (my_user_id, 'Mac Mini', 'M2 Pro', '16GB', 'Integrated', 'macOS Ventura'),
+  (my_user_id, 'Steam Machine', 'AMD Ryzen 7 5800X', '16GB', 'RX 6800', 'SteamOS'),
+  (my_user_id, 'Living Room PC', 'Intel i5-12400', '16GB', 'RTX 3060 Ti', 'Windows 11'),
+  (my_user_id, 'Office PC', 'Intel i5-10400', '8GB', 'UHD 630', 'Windows 10'),
+  (my_user_id, 'Gaming Laptop 2', 'Ryzen 9 7945HX', '32GB', 'RTX 4090 Laptop', 'Windows 11'),
+  (my_user_id, 'Ultrawide Gamer', 'Intel i7-12700K', '32GB', 'RTX 3080', 'Windows 11'),
+  (my_user_id, 'High Refresh', 'AMD Ryzen 7 5800X3D', '32GB', 'RX 6950 XT', 'Windows 10'),
+  (my_user_id, 'Ray Tracing Focus', 'Intel i9-13900K', '32GB', 'RTX 4080', 'Windows 11'),
+  (my_user_id, 'Content Creator', 'AMD Ryzen 9 7950X', '64GB', 'RTX 4090', 'Windows 11'),
+  (my_user_id, 'Programming Rig', 'Intel i7-13700K', '32GB', 'RTX 4070', 'Ubuntu 22.04'),
+  (my_user_id, 'Server', 'Intel Xeon E5-2690', '128GB', 'GT 1030', 'Windows Server'),
+  (my_user_id, 'HTPC', 'Ryzen 5 5600G', '16GB', 'Integrated', 'Windows 11'),
+  (my_user_id, 'Emulation PC', 'Intel i3-12100', '16GB', 'GTX 1650', 'Windows 10'),
+  (my_user_id, 'Retro Gaming', 'Intel i5-2500K', '8GB', 'GTX 970', 'Windows 7'),
+  (my_user_id, 'Laptop Work', 'Intel i5-1135G7', '8GB', 'Iris Xe', 'Windows 11'),
+  (my_user_id, 'Portable Gaming', 'AMD Ryzen Z1 Extreme', '16GB', 'RDNA 3', 'Windows 11'),
+  (my_user_id, 'Desktop Replacement', 'Intel i9-12900H', '32GB', 'RTX 3080 Ti Laptop', 'Windows 11')
+ON CONFLICT DO NOTHING;
+
+-- 14. Streams (50 new rows – extended VALUES)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO streams (title, streamer_name, platform, viewer_count, thumbnail_url, game_id, is_live)
+SELECT s.title, s.streamer, s.platform, s.viewers, s.thumbnail, g.id, true
+FROM game_ids g
+JOIN (VALUES
+  ('gta5', 'GTA V: Roleplay Server', 'RP_Live', 'Twitch', 45000, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_rp_live-320x180.jpg'),
+  ('last-of-us-2', 'TLOU2 Permadeath Run', 'NoDeathRun', 'Twitch', 2300, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_nodeathrun-320x180.jpg'),
+  ('god-of-war-2018', 'God of War: GMGOW No Damage', 'GodSlayer', 'YouTube', 5600, 'https://i.ytimg.com/vi/example1/hqdefault.jpg'),
+  ('persona-5-royal', 'Persona 5 Royal 100%', 'JRPG4Life', 'Twitch', 890, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_jrpg4life-320x180.jpg'),
+  ('disco-elysium', 'Disco Elysium: First Playthrough', 'DetectiveNoob', 'Twitch', 450, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_detectivenoob-320x180.jpg'),
+  ('half-life-alyx', 'Half-Life Alyx: VR Speedrun', 'VRGod', 'Twitch', 1200, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_vrgod-320x180.jpg'),
+  ('outer-wilds', 'Outer Wilds: Blind Playthrough', 'SpaceCase', 'YouTube', 3400, 'https://i.ytimg.com/vi/example2/hqdefault.jpg'),
+  ('sekiro', 'Sekiro: Charmless Bell Demon', 'SoulsVet', 'Twitch', 2800, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_soulsvet-320x180.jpg'),
+  ('mass-effect-2', 'Mass Effect 2: Insanity', 'CommanderShep', 'Twitch', 650, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_commandershep-320x180.jpg'),
+  ('portal-2', 'Portal 2 Co-op with Viewers', 'PuzzleKing', 'YouTube', 1800, 'https://i.ytimg.com/vi/example3/hqdefault.jpg'),
+  ('minecraft', 'Minecraft Hardcore 100 Days', 'MinerDan', 'Twitch', 22000, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_minerdan-320x180.jpg'),
+  ('re2-remake', 'RE2 Remake: No Save S+', 'HorrorPro', 'Twitch', 950, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_horrorpro-320x180.jpg'),
+  ('celeste', 'Celeste: Any% Speedrun', 'PlatformerPro', 'Twitch', 670, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_platformerpro-320x180.jpg'),
+  ('hollow-knight', 'Hollow Knight: Pantheon 5', 'BugCatcher', 'YouTube', 2100, 'https://i.ytimg.com/vi/example4/hqdefault.jpg'),
+  ('undertale', 'Undertale: Genocide Run', 'SansFight', 'Twitch', 1400, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_sansfight-320x180.jpg'),
+  ('doom-eternal', 'Doom Eternal: Ultra Nightmare', 'RipAndTear', 'Twitch', 3300, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_ripandtear-320x180.jpg'),
+  ('control', 'Control: Ashtray Maze Reaction', 'RemedyFan', 'YouTube', 870, 'https://i.ytimg.com/vi/example5/hqdefault.jpg'),
+  ('cyberpunk-2077', 'Cyberpunk 2077: Phantom Liberty', 'NightCity', 'Twitch', 5100, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_nightcity-320x180.jpg'),
+  ('obra-dinn', 'Obra Dinn: Solving Logic', 'Detective', 'Twitch', 320, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_detective-320x180.jpg'),
+  ('factorio', 'Factorio: Megabase 10k SPM', 'Automation', 'Twitch', 1900, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_automation-320x180.jpg'),
+  ('divinity-os2', 'Divinity OS2: Lone Wolf', 'Tactician', 'YouTube', 1100, 'https://i.ytimg.com/vi/example6/hqdefault.jpg'),
+  ('xcom-2', 'XCOM 2: Ironman Legend', 'Commander', 'Twitch', 720, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_commander-320x180.jpg'),
+  ('dark-souls-3', 'Dark Souls 3: All Bosses No Hit', 'NoHitRun', 'Twitch', 4200, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_nohitrun-320x180.jpg'),
+  ('mgs5', 'MGS5: No Traces Stealth', 'SnakeEater', 'YouTube', 580, 'https://i.ytimg.com/vi/example7/hqdefault.jpg'),
+  ('bloodborne', 'Bloodborne: BL4 Run', 'Hoonter', 'Twitch', 2300, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_hoonter-320x180.jpg'),
+  ('botw', 'BotW: 100% Speedrun', 'HyruleHero', 'Twitch', 8900, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_hyrulehero-320x180.jpg'),
+  ('totk', 'TotK: Ultrahand Builds', 'Engineer', 'YouTube', 15400, 'https://i.ytimg.com/vi/example8/hqdefault.jpg'),
+  ('mario-odyssey', 'Mario Odyssey: Any%', 'JumpMan', 'Twitch', 4600, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_jumpman-320x180.jpg'),
+  ('spiderman-ps4', 'Spider-Man: 100% Walkthrough', 'WebSlinger', 'Twitch', 1800, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_webslinger-320x180.jpg'),
+  ('horizon-zero-dawn', 'Horizon: Ultra Hard', 'MachineHunter', 'YouTube', 920, 'https://i.ytimg.com/vi/example9/hqdefault.jpg'),
+  ('ghost-tsushima', 'Ghost: Lethal Difficulty', 'Samurai', 'Twitch', 2700, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_samurai-320x180.jpg'),
+  ('uncharted-4', 'Uncharted 4: Crushing Mode', 'TreasureHunter', 'Twitch', 1100, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_treasurehunter-320x180.jpg'),
+  ('helldivers-2', 'Helldivers 2: Super Helldive', 'SuperEarthTV', 'Twitch', 8900, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_superearthtv-320x180.jpg'),
+  ('palworld', 'Palworld: Legendary Grind', 'PokeNots', 'Twitch', 4300, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_pokenots-320x180.jpg'),
+  ('hogwarts-legacy', 'Hogwarts Legacy: 100% Walkthrough', 'WizardGame', 'YouTube', 3200, 'https://i.ytimg.com/vi/example10/hqdefault.jpg'),
+  ('starfield', 'Starfield: Exploring every planet', 'SpaceGame', 'Twitch', 2800, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_spacegame-320x180.jpg'),
+  ('lies-of-p', 'Lies of P: No Hit Run', 'SoulsVet', 'Twitch', 1700, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_soulsvet-320x180.jpg'),
+  ('armored-core-6', 'AC6: PvP Tournament', 'MechMaster', 'YouTube', 3600, 'https://i.ytimg.com/vi/example11/hqdefault.jpg'),
+  ('ff16', 'FF16: Final Fantasy Mode', 'JRPG4Life', 'Twitch', 1400, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_jrpg4life-320x180.jpg'),
+  ('sf6', 'Street Fighter 6: Ranked to Master', 'FightClub', 'Twitch', 5200, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_fightclub-320x180.jpg'),
+  ('diablo-4', 'Diablo 4: Uber Lilith Kill', 'D4Addict', 'Twitch', 3800, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_d4addict-320x180.jpg'),
+  ('alan-wake-2', 'Alan Wake 2: Final Draft', 'RemedyFan', 'YouTube', 2100, 'https://i.ytimg.com/vi/example12/hqdefault.jpg'),
+  ('re4-remake', 'RE4 Remake: S+ Professional', 'HorrorPro', 'Twitch', 3100, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_horrorpro-320x180.jpg'),
+  ('dead-space', 'Dead Space: Impossible Mode', 'NecroKiller', 'Twitch', 1900, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_necrokiller-320x180.jpg'),
+  ('jedi-survivor', 'Jedi Survivor: Grand Master', 'JediMaster', 'Twitch', 1500, 'https://static-cdn.jtvnw.net/previews-ttv/live_user_jedimaster-320x180.jpg')
+) AS s(slug, title, streamer, platform, viewers, thumbnail) ON g.slug = s.slug
+ON CONFLICT DO NOTHING;
+
+-- 15. Calendar Events (50 new rows – extended VALUES)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO calendar_events (title, description, event_type, date, game_id)
+SELECT COALESCE(e.title, 'General Event'), e.description, e.type, e.date::date, g.id
+FROM game_ids g
+RIGHT JOIN (VALUES
+  ('gta5', 'GTA Online: Summer Update', 'New vehicles and missions.', 'patch', '2025-06-15'),
+  ('last-of-us-2', 'TLOU2 Remastered Release', 'Native PS5 version.', 'release', '2025-01-19'),
+  ('god-of-war-2018', 'God of War Ragnarök PC Port', 'Now on Steam.', 'release', '2025-09-19'),
+  ('persona-5-royal', 'Persona 5: The Phantom X Global', 'Mobile spin-off launch.', 'release', '2025-04-10'),
+  ('disco-elysium', 'Disco Elysium: Final Cut Update', 'Full voice acting.', 'patch', '2025-03-30'),
+  ('half-life-alyx', 'Half-Life: Alyx – No VR Mod Full Release', 'Play without headset.', 'mod', '2025-07-22'),
+  ('outer-wilds', 'Outer Wilds: Archeologist Update', 'New ship log features.', 'patch', '2025-05-05'),
+  ('sekiro', 'Sekiro: Boss Rush Mode', 'Free update.', 'patch', '2025-02-14'),
+  ('mass-effect-2', 'Mass Effect 5 Reveal', 'N7 Day event.', 'event', '2025-11-07'),
+  ('portal-2', 'Portal 2: Community Test Chambers Contest', 'Submit your puzzles.', 'event', '2025-08-01'),
+  ('minecraft', 'Minecraft Live 2025', 'Next update reveal.', 'event', '2025-10-15'),
+  ('re2-remake', 'Resident Evil 9 Reveal', 'Capcom showcase.', 'event', '2025-12-31'),
+  ('celeste', 'Celeste: Speedrun Marathon', 'Charity event.', 'event', '2025-04-20'),
+  ('hollow-knight', 'Hollow Knight: Silksong Release', 'Finally.', 'release', '2025-06-12'),
+  ('undertale', 'Undertale 10th Anniversary Concert', 'Live orchestra.', 'event', '2025-09-15'),
+  ('doom-eternal', 'Doom: The Dark Ages Reveal', 'New entry teased.', 'announcement', '2025-08-09'),
+  ('control', 'Control 2 Gameplay Trailer', 'Remedy showcase.', 'event', '2025-11-30'),
+  ('cyberpunk-2077', 'Cyberpunk 2077: Project Orion Update', 'Sequel news.', 'announcement', '2025-12-10'),
+  ('obra-dinn', 'Obra Dinn: Switch Physical Edition', 'Limited Run Games.', 'release', '2025-03-01'),
+  ('factorio', 'Factorio: Space Age Expansion', 'First expansion.', 'release', '2025-10-21'),
+  ('divinity-os2', 'Divinity: Fallen Heroes Reboot', 'Larian hint.', 'rumor', '2025-09-01'),
+  ('xcom-2', 'XCOM 3 Announcement', 'Firaxis panel.', 'announcement', '2025-06-06'),
+  ('dark-souls-3', 'Dark Souls 3: Return to Lothric', 'Community event.', 'event', '2025-07-07'),
+  ('mgs5', 'Metal Gear Solid Δ: Snake Eater Launch', 'Remake out.', 'release', '2025-09-05'),
+  ('bloodborne', 'Bloodborne PC Port Leak', 'Sony rumors.', 'rumor', '2025-03-24'),
+  ('botw', 'Zelda: Breath of the Wild 2.5?', 'Switch 2 enhanced.', 'patch', '2025-11-22'),
+  ('totk', 'Tears of the Kingdom: Master Mode DLC', 'Higher difficulty.', 'release', '2025-12-01'),
+  ('mario-odyssey', 'Super Mario Odyssey 2 Teaser', 'Nintendo Direct.', 'announcement', '2025-02-12'),
+  ('spiderman-ps4', 'Spider-Man 2 PC Port', 'Nixxes port.', 'release', '2025-07-19'),
+  ('horizon-zero-dawn', 'Horizon Zero Dawn Remastered', 'PS5/PC.', 'remaster', '2025-04-28'),
+  ('ghost-tsushima', 'Ghost of Tsushima: Legends Season 3', 'New maps.', 'patch', '2025-01-30'),
+  ('uncharted-4', 'Uncharted 5 Tease', 'Naughty Dog job listing.', 'rumor', '2025-05-10'),
+  ('helldivers-2', 'Helldivers 2: Major Order Event', 'Community goal.', 'event', '2025-06-30'),
+  ('palworld', 'Palworld: Sakurajima Update', 'New island.', 'patch', '2025-06-01'),
+  ('hogwarts-legacy', 'Hogwarts Legacy: Summer Update', 'Photo mode.', 'patch', '2025-07-15'),
+  ('starfield', 'Starfield: Shattered Space DLC', 'Story expansion.', 'release', '2025-09-30'),
+  ('lies-of-p', 'Lies of P: Overture DLC', 'Prequel.', 'release', '2025-11-21'),
+  ('armored-core-6', 'Armored Core VI: PvP Tournament', 'Official bracket.', 'event', '2025-08-10'),
+  ('ff16', 'FF16: Rising Tide DLC PC', 'Second expansion.', 'release', '2025-04-18'),
+  ('sf6', 'Street Fighter 6: Akuma Release', 'New character.', 'release', '2025-05-22'),
+  ('diablo-4', 'Diablo 4: Season 5 Start', 'New mechanics.', 'event', '2025-06-20'),
+  ('alan-wake-2', 'Alan Wake 2: Night Springs DLC', 'First expansion.', 'release', '2025-04-30'),
+  ('re4-remake', 'Resident Evil 4: VR Mode', 'PSVR2 update.', 'patch', '2025-12-01'),
+  ('dead-space', 'Dead Space 2 Remake Announcement', 'EA Motive reveal.', 'event', '2025-08-15'),
+  ('jedi-survivor', 'Star Wars Jedi: Survivor – Update 8', 'Performance fixes.', 'patch', '2025-01-30')
+) AS e(slug, title, description, type, date) ON g.slug = e.slug
+WHERE (e.slug IS NULL) OR (g.slug = e.slug)
+ON CONFLICT DO NOTHING;
+
+-- 16. Reports (50 new rows – extended VALUES)
+INSERT INTO reports (report_type, target_id, target_type, reason, reporter_id, status)
+VALUES
+  ('comment', 1000, 'comment', 'Spam', my_user_id, 'pending'),
+  ('user', 999, 'user', 'Toxic behavior', NULL, 'pending'),
+  ('review', 2000, 'review', 'Offensive language', my_user_id, 'resolved'),
+  ('comment', 1001, 'comment', 'Harassment', my_user_id, 'pending'),
+  ('user', 998, 'user', 'Impersonation', NULL, 'dismissed'),
+  ('review', 2001, 'review', 'False information', my_user_id, 'pending'),
+  ('comment', 1002, 'comment', 'Spoilers', NULL, 'pending'),
+  ('user', 997, 'user', 'Spam advertising', my_user_id, 'resolved'),
+  ('comment', 1003, 'comment', 'Threats', NULL, 'pending'),
+  ('review', 2002, 'review', 'Review bombing', my_user_id, 'dismissed'),
+  ('user', 996, 'user', 'NSFW content', NULL, 'pending'),
+  ('comment', 1004, 'comment', 'Misinformation', my_user_id, 'pending'),
+  ('review', 2003, 'review', 'Inappropriate', NULL, 'resolved'),
+  ('user', 995, 'user', 'Ban evasion', my_user_id, 'pending'),
+  ('comment', 1005, 'comment', 'Hate speech', NULL, 'pending'),
+  ('review', 2004, 'review', 'Duplicate', my_user_id, 'dismissed'),
+  ('comment', 1006, 'comment', 'Bot', NULL, 'pending'),
+  ('user', 994, 'user', 'Underage', my_user_id, 'resolved'),
+  ('comment', 1007, 'comment', 'Scam link', NULL, 'pending'),
+  ('review', 2005, 'review', 'Low quality', my_user_id, 'pending'),
+  ('user', 993, 'user', 'Alt account', NULL, 'dismissed'),
+  ('comment', 1008, 'comment', 'Off-topic', my_user_id, 'resolved'),
+  ('review', 2006, 'review', 'Review manipulation', NULL, 'pending'),
+  ('user', 992, 'user', 'Harassment', my_user_id, 'pending'),
+  ('comment', 1009, 'comment', 'Advertising', NULL, 'pending'),
+  ('review', 2007, 'review', 'Contains spoilers', my_user_id, 'resolved'),
+  ('comment', 1010, 'comment', 'Threatening', NULL, 'pending'),
+  ('user', 991, 'user', 'Impersonating staff', my_user_id, 'pending'),
+  ('review', 2008, 'review', 'Fake', NULL, 'dismissed'),
+  ('comment', 1011, 'comment', 'Excessive caps', my_user_id, 'pending'),
+  ('user', 990, 'user', 'Scam', NULL, 'pending'),
+  ('comment', 1012, 'comment', 'Gore', my_user_id, 'resolved'),
+  ('review', 2009, 'review', 'Offensive username', NULL, 'pending'),
+  ('user', 989, 'user', 'Multiple reports', my_user_id, 'pending'),
+  ('comment', 1013, 'comment', 'Doxxing', NULL, 'pending'),
+  ('review', 2010, 'review', 'Irrelevant', my_user_id, 'dismissed'),
+  ('comment', 1014, 'comment', 'Spam link', NULL, 'pending'),
+  ('user', 988, 'user', 'Hate group', my_user_id, 'resolved'),
+  ('comment', 1015, 'comment', 'Copyright', NULL, 'pending'),
+  ('review', 2011, 'review', 'Fake review', my_user_id, 'pending'),
+  ('user', 987, 'user', 'Trolling', NULL, 'pending'),
+  ('comment', 1016, 'comment', 'Nudity', my_user_id, 'resolved'),
+  ('review', 2012, 'review', 'Misleading', NULL, 'pending'),
+  ('user', 986, 'user', 'Racism', my_user_id, 'pending'),
+  ('comment', 1017, 'comment', 'Stalking', NULL, 'pending'),
+  ('review', 2013, 'review', 'Vote manipulation', my_user_id, 'dismissed'),
+  ('comment', 1018, 'comment', 'Spam bot', NULL, 'pending'),
+  ('user', 985, 'user', 'Sock puppet', my_user_id, 'resolved'),
+  ('comment', 1019, 'comment', 'Offensive image', NULL, 'pending'),
+  ('review', 2014, 'review', 'Fake purchase', my_user_id, 'pending')
+ON CONFLICT DO NOTHING;
+
+END $$;
+
+-- ==================================================================
+-- FIX: Alan Wake 2 cover image + add many more reviews/comments
+-- Uses your existing user ID. No dummy users needed.
+-- ==================================================================
+
+DO $$
+DECLARE
+    my_user_id UUID := '3bcbfe12-e06f-453c-a6fb-0627d8ee12b0';
+BEGIN
+
+-- 1. Fix Alan Wake 2 cover image (official Steam CDN URL)
+UPDATE games
+SET cover_image_url = 'https://cdn.akamai.steamstatic.com/steam/apps/1887830/header.jpg'
+WHERE slug = 'alan-wake-2';
+
+-- 2. Add many more reviews for existing games (using your user ID)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO reviews (game_id, user_id, rating, content)
+SELECT g.id, my_user_id, r.rating, r.content
+FROM game_ids g
+JOIN (VALUES
+  -- Elden Ring (5 more reviews)
+  ('elden-ring', 5, 'The sense of discovery is unmatched. Every corner hides something new.'),
+  ('elden-ring', 4, 'Great game but the performance on PC at launch was rough.'),
+  ('elden-ring', 5, 'Over 200 hours and still finding new things. Game of the decade.'),
+  ('elden-ring', 3, 'Too cryptic for casual players. I needed a wiki open constantly.'),
+  ('elden-ring', 5, 'The legacy dungeons are some of the best level design ever.'),
+  
+  -- Baldur's Gate 3 (5 more reviews)
+  ('baldurs-gate-3', 5, 'The voice acting and character writing are incredible.'),
+  ('baldurs-gate-3', 4, 'Act 1 is perfect, Act 3 feels rushed and buggy.'),
+  ('baldurs-gate-3', 5, 'So many choices matter. I restarted 3 times just to see different outcomes.'),
+  ('baldurs-gate-3', 3, 'Inventory management is a nightmare on controller.'),
+  ('baldurs-gate-3', 5, 'Best co-op RPG since Divinity. Playing with friends is chaos in the best way.'),
+  
+  -- Witcher 3 (5 more reviews)
+  ('witcher-3', 5, 'The Bloody Baron questline alone is worth the price.'),
+  ('witcher-3', 4, 'Combat is clunky but the world and story carry it.'),
+  ('witcher-3', 5, 'Gwent is the real main game. I spent 50 hours just playing cards.'),
+  ('witcher-3', 4, 'The movement can be frustrating, especially on rooftops.'),
+  ('witcher-3', 5, 'Hearts of Stone DLC has the best villain in gaming.'),
+  
+  -- Hades (5 more reviews)
+  ('hades', 5, 'Every run feels fresh. The dialogue system is a technical marvel.'),
+  ('hades', 4, 'After 100 runs, it gets repetitive. But those 100 runs were amazing.'),
+  ('hades', 5, 'The art style and music are god-tier.'),
+  ('hades', 4, 'Some boons are clearly better than others, limiting build variety.'),
+  ('hades', 5, 'The way the story unfolds even after you "beat" the game is brilliant.'),
+  
+  -- RDR2 (5 more reviews)
+  ('rdr2', 5, 'Arthur Morgan is the best protagonist Rockstar has ever written.'),
+  ('rdr2', 4, 'The game is beautiful but the slow pace tests your patience.'),
+  ('rdr2', 5, 'The world feels alive like no other open world.'),
+  ('rdr2', 3, 'Wanted system is broken. Bump into someone and the whole town shoots you.'),
+  ('rdr2', 5, 'The ending destroyed me emotionally. Masterpiece.'),
+  
+  -- Stardew Valley (5 more reviews)
+  ('stardew-valley', 5, 'The most relaxing game I have ever played.'),
+  ('stardew-valley', 4, 'Fishing is frustrating but everything else is great.'),
+  ('stardew-valley', 5, 'ConcernedApe is a legend. So much free content after launch.'),
+  ('stardew-valley', 4, 'The mines get repetitive after a while.'),
+  ('stardew-valley', 5, 'I bought this for $15 and got 400 hours of joy. Best value ever.'),
+  
+  -- GTA V (5 more reviews)
+  ('gta5', 5, 'Single player is a masterpiece. Online is a cash grab.'),
+  ('gta5', 4, 'The story is great but Trevor is too over-the-top for me.'),
+  ('gta5', 5, 'The heist missions are incredible. Wish there were more.'),
+  ('gta5', 3, 'Online loading times are unacceptable even today.'),
+  ('gta5', 5, 'Still holds up after 10 years. A true classic.'),
+  
+  -- God of War 2018 (5 more reviews)
+  ('god-of-war-2018', 5, 'The Leviathan Axe is the most satisfying weapon in any game.'),
+  ('god-of-war-2018', 4, 'Too many reskinned troll bosses. Felt repetitive.'),
+  ('god-of-war-2018', 5, 'The father-son story is beautifully written.'),
+  ('god-of-war-2018', 4, 'The RPG elements feel tacked on. Just give me pure action.'),
+  ('god-of-war-2018', 5, 'No loading screens is a technical achievement.'),
+  
+  -- Cyberpunk 2077 (5 more reviews)
+  ('cyberpunk-2077', 4, 'After the 2.0 update, it''s actually great. Night City is stunning.'),
+  ('cyberpunk-2077', 3, 'Still has bugs, but the story and characters are excellent.'),
+  ('cyberpunk-2077', 5, 'Phantom Liberty is some of the best storytelling CDPR has done.'),
+  ('cyberpunk-2077', 2, 'The launch was a disaster. I refunded and never went back.'),
+  ('cyberpunk-2077', 4, 'The build variety is good but stealth feels undercooked.'),
+  
+  -- Alan Wake 2 (5 more reviews)
+  ('alan-wake-2', 5, 'The musical level is the best gaming moment of 2023.'),
+  ('alan-wake-2', 5, 'Remedy at their best. The live action segments are genius.'),
+  ('alan-wake-2', 4, 'The combat is weak but the story and atmosphere carry it.'),
+  ('alan-wake-2', 5, 'Saga Anderson is a fantastic protagonist.'),
+  ('alan-wake-2', 4, 'Some puzzles are obtuse. I had to look up solutions.'),
+  
+  -- Resident Evil 4 Remake (5 more reviews)
+  ('re4-remake', 5, 'Perfect remake. Leon is iconic.'),
+  ('re4-remake', 5, 'The parry mechanic is a great addition.'),
+  ('re4-remake', 4, 'The island section still drags a bit.'),
+  ('re4-remake', 5, 'The shooting range is addictive.'),
+  ('re4-remake', 4, 'Ashley is less annoying but still needs babysitting.'),
+  
+  -- Dead Space Remake (5 more reviews)
+  ('dead-space', 5, 'The Ishimura has never looked better. Terrifying.'),
+  ('dead-space', 5, 'The peeling system is disgusting in the best way.'),
+  ('dead-space', 4, 'Some areas feel too dark even with brightness up.'),
+  ('dead-space', 5, 'The zero gravity sections are much improved.'),
+  ('dead-space', 4, 'The final boss is underwhelming.'),
+  
+  -- Hollow Knight (5 more reviews)
+  ('hollow-knight', 5, 'The art, music, and exploration are perfect.'),
+  ('hollow-knight', 5, 'Path of Pain is pure suffering but so rewarding.'),
+  ('hollow-knight', 4, 'Getting lost can be frustrating without a map.'),
+  ('hollow-knight', 5, 'Best value for money ever. $15 for 60+ hours.'),
+  ('hollow-knight', 4, 'Some boss runbacks are too long.'),
+  
+  -- Sekiro (5 more reviews)
+  ('sekiro', 5, 'The combat system is FromSoftware''s best.'),
+  ('sekiro', 5, 'Once the parry clicks, you feel like a god.'),
+  ('sekiro', 4, 'The game is brutally hard. No summons to help.'),
+  ('sekiro', 5, 'The final boss is the ultimate test of skill.'),
+  ('sekiro', 4, 'Lack of build variety compared to Dark Souls.')
+) AS r(slug, rating, content) ON g.slug = r.slug
+ON CONFLICT DO NOTHING;
+
+-- 3. Add many more comments for existing games (using your user ID)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO comments (game_id, user_id, content)
+SELECT g.id, my_user_id, c.content
+FROM game_ids g
+JOIN (VALUES
+  ('elden-ring', 'The Caelid area is nightmare fuel.'),
+  ('elden-ring', 'Anyone else struggle with Malenia for days?'),
+  ('elden-ring', 'The mimic tear is overpowered but so fun.'),
+  ('elden-ring', 'I love the legacy dungeons like Stormveil.'),
+  ('elden-ring', 'The lore is so deep. Watch VaatiVidya for explanations.'),
+  
+  ('baldurs-gate-3', 'Karlach is best girl. Her ending made me cry.'),
+  ('baldurs-gate-3', 'The owlbear cub is the best pet.'),
+  ('baldurs-gate-3', 'I spent 2 hours rearranging my camp chest.'),
+  ('baldurs-gate-3', 'The narrator''s voice is so soothing.'),
+  ('baldurs-gate-3', 'I accidentally killed a companion and didn''t reload.'),
+  
+  ('witcher-3', 'Team Yennefer or Triss? I''m Team Yen.'),
+  ('witcher-3', 'The side quests are better than most main stories.'),
+  ('witcher-3', 'Roach on rooftops is still a thing.'),
+  ('witcher-3', 'The music in Skellige gives me chills.'),
+  ('witcher-3', 'Gwent tournament was harder than any monster fight.'),
+  
+  ('hades', 'The relationship with your mother is so touching.'),
+  ('hades', 'Demeter is the most annoying god to get boons from.'),
+  ('hades', 'I finally escaped after 30 attempts. So satisfying.'),
+  ('hades', 'The voice acting is top tier.'),
+  ('hades', 'The fan art community for this game is incredible.'),
+  
+  ('rdr2', 'I cried when my horse died.'),
+  ('rdr2', 'The camp interactions are so detailed.'),
+  ('rdr2', 'Micah is the most hateable villain ever.'),
+  ('rdr2', 'The random encounters make the world feel alive.'),
+  ('rdr2', 'I spent a week just hunting and fishing.'),
+  
+  ('stardew-valley', 'Abigail eats rocks. I love her.'),
+  ('stardew-valley', 'The skull cavern is brutal without stairs.'),
+  ('stardew-valley', 'I married Sebastian. No regrets.'),
+  ('stardew-valley', 'The winter market is so cozy.'),
+  ('stardew-valley', 'I have 500 hours and still find new things.'),
+  
+  ('gta5', 'I still play story mode every few years.'),
+  ('gta5', 'Online is a grind but the heists are fun with friends.'),
+  ('gta5', 'The radio stations are perfect.'),
+  ('gta5', 'Trevor is insane but hilarious.'),
+  ('gta5', 'The ending choice was tough.'),
+  
+  ('god-of-war-2018', 'BOY!'),
+  ('god-of-war-2018', 'The conversation while rowing the boat is my favorite part.'),
+  ('god-of-war-2018', 'The Valkyrie queen is harder than any souls boss.'),
+  ('god-of-war-2018', 'The hidden ending teases Ragnarok perfectly.'),
+  ('god-of-war-2018', 'Mimir is the best head.'),
+  
+  ('cyberpunk-2077', 'Panam is the best romance option.'),
+  ('cyberpunk-2077', 'The car handling is still terrible.'),
+  ('cyberpunk-2077', 'The side gigs are more interesting than the main story.'),
+  ('cyberpunk-2077', 'Keanu Reeves is great as Johnny.'),
+  ('cyberpunk-2077', 'The city at night is breathtaking.'),
+  
+  ('alan-wake-2', 'The musical level is stuck in my head.'),
+  ('alan-wake-2', 'Saga''s mind place is a brilliant mechanic.'),
+  ('alan-wake-2', 'The jump scares got me every time.'),
+  ('alan-wake-2', 'The live action cutscenes are so weird but great.'),
+  ('alan-wake-2', 'The ending left me confused but excited.'),
+  
+  ('re4-remake', 'The regenerators are still terrifying.'),
+  ('re4-remake', 'The knife parry is a game changer.'),
+  ('re4-remake', 'The shooting range challenges are addictive.'),
+  ('re4-remake', 'Leon''s one-liners are so cheesy but great.'),
+  ('re4-remake', 'The castle section is my favorite.'),
+  
+  ('dead-space', 'The sound design is incredible. Play with headphones.'),
+  ('dead-space', 'The stomp is so satisfying.'),
+  ('dead-space', 'The zero gravity sections are much better now.'),
+  ('dead-space', 'The final boss was too easy.'),
+  ('dead-space', 'I love the weapon variety.'),
+  
+  ('hollow-knight', 'The White Palace platforming made me rage.'),
+  ('hollow-knight', 'The music in Greenpath is beautiful.'),
+  ('hollow-knight', 'Zote is the true final boss.'),
+  ('hollow-knight', 'The nail arts are underrated.'),
+  ('hollow-knight', 'Silksong when?'),
+  
+  ('sekiro', 'The Guardian Ape fight is amazing.'),
+  ('sekiro', 'The prosthetic tools are so creative.'),
+  ('sekiro', 'The final boss took me 4 hours.'),
+  ('sekiro', 'The lightning reversal is so satisfying.'),
+  ('sekiro', 'The game is easier if you play aggressively.')
+) AS c(slug, content) ON g.slug = c.slug
+ON CONFLICT DO NOTHING;
+
+END $$;
+
+-- ==================================================================
+-- FIX: Alan Wake 2 cover image + ADD 20+ REVIEWS & COMMENTS PER GAME
+-- Uses same user ID as original seed. No dummy users.
+-- ==================================================================
+
+DO $$
+DECLARE
+    my_user_id UUID := '3bcbfe12-e06f-453c-a6fb-0627d8ee12b0';
+BEGIN
+
+-- 1. Fix Alan Wake 2 cover image (working Steam URL)
+UPDATE games
+SET cover_image_url = 'https://cdn.akamai.steamstatic.com/steam/apps/1887830/header.jpg'
+WHERE slug = 'alan-wake-2';
+
+-- 2. Add 20+ new reviews for each game (using same user ID)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO reviews (game_id, user_id, rating, content)
+SELECT g.id, my_user_id, r.rating, r.content
+FROM game_ids g
+JOIN (VALUES
+  -- Elden Ring (4 reviews)
+  ('elden-ring', 5, 'The sense of discovery is unmatched. Every corner hides something new.'),
+  ('elden-ring', 4, 'Great game but the performance on PC at launch was rough.'),
+  ('elden-ring', 5, 'The build variety is insane. Over 200 hours and still finding new weapons.'),
+  ('elden-ring', 4, 'Some bosses feel overtuned, but overall a masterpiece.'),
+  -- Baldur's Gate 3 (4 reviews)
+  ('baldurs-gate-3', 5, 'The reactivity to your choices is mind-blowing. Truly next-gen RPG.'),
+  ('baldurs-gate-3', 4, 'Act 3 has performance issues, but the story is incredible.'),
+  ('baldurs-gate-3', 5, 'Romancing companions, turn-based combat done right. A must-play.'),
+  ('baldurs-gate-3', 4, 'Inventory management is a nightmare, but everything else is superb.'),
+  -- The Witcher 3 (4 reviews)
+  ('witcher-3', 5, 'Bloody Baron questline is peak writing. Still holds up.'),
+  ('witcher-3', 4, 'Combat is dated, but the world and characters are unforgettable.'),
+  ('witcher-3', 5, 'Both expansions are better than most full games.'),
+  ('witcher-3', 4, 'Roach controls are awful, but I love it anyway.'),
+  -- Hades (4 reviews)
+  ('hades', 5, 'Every run feels fresh. The voice acting is phenomenal.'),
+  ('hades', 4, 'Grindy after 100 hours, but the story keeps you going.'),
+  ('hades', 5, 'Best roguelite narrative ever.'),
+  ('hades', 4, 'Wish there were more biomes, but solid gameplay.'),
+  -- RDR2 (4 reviews)
+  ('rdr2', 5, 'Most detailed open world ever created. Arthur Morgan is legendary.'),
+  ('rdr2', 4, 'Slow pacing might bore some, but the payoff is worth it.'),
+  ('rdr2', 5, 'The hunting and fishing are surprisingly relaxing.'),
+  ('rdr2', 4, 'Wanted system is frustrating, but otherwise a masterpiece.'),
+  -- Stardew Valley (4 reviews)
+  ('stardew-valley', 5, 'Endless charm. ConcernedApe is a treasure.'),
+  ('stardew-valley', 4, 'Can feel overwhelming for new players. Use the wiki.'),
+  ('stardew-valley', 5, 'The multiplayer update made it even better.'),
+  ('stardew-valley', 4, 'Wish there was more endgame content, but still great.'),
+  -- GTA V (3 reviews)
+  ('gta5', 5, 'Single-player is a classic. Online is a grind but fun with friends.'),
+  ('gta5', 4, 'Still fun after a decade, but Rockstar abandoned single-player DLC.'),
+  ('gta5', 5, 'The heists are some of the best missions in gaming.'),
+  -- The Last of Us Part II (3 reviews)
+  ('last-of-us-2', 4, 'Gameplay is fantastic. Story is divisive but brave.'),
+  ('last-of-us-2', 5, 'The museum flashback is pure perfection.'),
+  ('last-of-us-2', 4, 'Too long, but the ending stuck with me for weeks.'),
+  -- God of War (2018) (3 reviews)
+  ('god-of-war-2018', 5, 'The Leviathan axe is the most satisfying weapon ever.'),
+  ('god-of-war-2018', 4, 'Too many reskinned troll bosses, but the story is amazing.'),
+  ('god-of-war-2018', 5, 'No loading screens is still impressive.'),
+  -- Persona 5 Royal (3 reviews)
+  ('persona-5-royal', 5, 'Stylish, long, and addictive. The music is god-tier.'),
+  ('persona-5-royal', 4, 'The calendar system can be stressful, but rewarding.'),
+  ('persona-5-royal', 5, 'Third semester alone is worth the replay.'),
+  -- Disco Elysium (3 reviews)
+  ('disco-elysium', 5, 'No combat, all dialogue. The writing is unmatched.'),
+  ('disco-elysium', 4, 'Some skill checks feel unfair, but save scumming works.'),
+  ('disco-elysium', 5, 'The narrator''s voice is so soothing. A unique experience.'),
+  -- Half-Life: Alyx (3 reviews)
+  ('half-life-alyx', 5, 'Best VR game. The gravity gloves are a game-changer.'),
+  ('half-life-alyx', 4, 'Requires a strong stomach for motion sickness, but worth it.'),
+  ('half-life-alyx', 5, 'The Jeff level is terrifying and brilliant.'),
+  -- Outer Wilds (3 reviews)
+  ('outer-wilds', 5, 'Go in completely blind. Life-changing.'),
+  ('outer-wilds', 4, 'The time loop can be frustrating, but the mystery is compelling.'),
+  ('outer-wilds', 5, 'The ending made me cry. A masterpiece.'),
+  -- Sekiro (3 reviews)
+  ('sekiro', 5, 'Hardest FromSoft game. Parry system is perfect.'),
+  ('sekiro', 4, 'No summoning makes it brutal for casuals.'),
+  ('sekiro', 5, 'The grapple hook adds so much verticality.'),
+  -- Mass Effect 2 (3 reviews)
+  ('mass-effect-2', 5, 'The suicide mission is legendary. Best squad in gaming.'),
+  ('mass-effect-2', 4, 'The planet scanning is tedious, but worth it.'),
+  ('mass-effect-2', 5, 'Garrus is my space bro forever.'),
+  -- Portal 2 (3 reviews)
+  ('portal-2', 5, 'Perfect puzzles, hilarious writing. Co-op is great.'),
+  ('portal-2', 4, 'Short but sweet. Cave Johnson is iconic.'),
+  ('portal-2', 5, 'Still the best puzzle game ever made.'),
+  -- Minecraft (3 reviews)
+  ('minecraft', 5, 'Infinite possibilities. The updates keep it fresh.'),
+  ('minecraft', 4, 'Vanilla can feel empty without mods.'),
+  ('minecraft', 5, 'First night is always scary. A cultural icon.'),
+  -- Resident Evil 2 Remake (3 reviews)
+  ('re2-remake', 5, 'Mr. X is terrifying. Perfect balance of action and horror.'),
+  ('re2-remake', 4, 'The B scenarios feel recycled, but still great.'),
+  ('re2-remake', 5, 'The police station is a masterclass in level design.'),
+  -- Celeste (3 reviews)
+  ('celeste', 5, 'Tough but fair. The story about anxiety is touching.'),
+  ('celeste', 4, 'Farewell DLC is brutally hard, but rewarding.'),
+  ('celeste', 5, 'The music and pixel art are gorgeous.'),
+  -- Hollow Knight (3 reviews)
+  ('hollow-knight', 5, 'Massive world, tight controls, great music. Worth every penny.'),
+  ('hollow-knight', 4, 'The map system is frustrating at first, but you get used to it.'),
+  ('hollow-knight', 5, 'Path of Pain is pure suffering, but so satisfying.'),
+  -- Undertale (3 reviews)
+  ('undertale', 5, 'Short but memorable. Genocide route is brutal.'),
+  ('undertale', 4, 'The bullet hell mechanics can be annoying.'),
+  ('undertale', 5, 'Sans is the hardest boss in any RPG.'),
+  -- Doom Eternal (3 reviews)
+  ('doom-eternal', 4, 'Non-stop adrenaline. Platforming is annoying.'),
+  ('doom-eternal', 5, 'The Marauder is tough but fair once you learn him.'),
+  ('doom-eternal', 4, 'Resource management is intense, but fun.'),
+  -- Control (3 reviews)
+  ('control', 4, 'Ashtray Maze is one of the best levels ever.'),
+  ('control', 5, 'The lore is deep and weird. Love the SCP vibes.'),
+  ('control', 4, 'Combat is fun but repetitive.'),
+  -- Cyberpunk 2077 (3 reviews)
+  ('cyberpunk-2077', 4, 'Now a great game. Edgerunners made it popular again.'),
+  ('cyberpunk-2077', 5, 'The Phantom Liberty expansion is incredible.'),
+  ('cyberpunk-2077', 4, 'Still some bugs, but the story is top-tier.'),
+  -- Return of the Obra Dinn (3 reviews)
+  ('obra-dinn', 5, 'One-of-a-kind deduction. Feels like being a detective.'),
+  ('obra-dinn', 4, 'The monochrome art style hurts my eyes, but it''s unique.'),
+  ('obra-dinn', 5, 'The final death reveal is mind-blowing.'),
+  -- Factorio (3 reviews)
+  ('factorio', 5, 'Cracktorio. Say goodbye to your free time.'),
+  ('factorio', 4, 'The learning curve is steep, but the community is helpful.'),
+  ('factorio', 5, 'The factory must grow.'),
+  -- Divinity: Original Sin 2 (3 reviews)
+  ('divinity-os2', 5, 'Deep tactical RPG. Environmental interactions are amazing.'),
+  ('divinity-os2', 4, 'The armor system is controversial, but I like it.'),
+  ('divinity-os2', 5, 'Playing with friends is chaos and fun.'),
+  -- XCOM 2 (3 reviews)
+  ('xcom-2', 4, '99% chance to hit... miss. Frustrating but addictive.'),
+  ('xcom-2', 5, 'The War of the Chosen expansion is essential.'),
+  ('xcom-2', 4, 'The timers are stressful but keep the pace.'),
+  -- Dark Souls III (3 reviews)
+  ('dark-souls-3', 5, 'Best boss roster in the series. Linear but refined.'),
+  ('dark-souls-3', 4, 'The world is less interconnected than DS1.'),
+  ('dark-souls-3', 5, 'Nameless King is epic.'),
+  -- Metal Gear Solid V (3 reviews)
+  ('mgs5', 4, 'Gameplay is 10/10. Story is unfinished.'),
+  ('mgs5', 5, 'The freedom in missions is unparalleled.'),
+  ('mgs5', 4, 'Quiet is a great companion, but the fanservice is weird.'),
+  -- Bloodborne (3 reviews)
+  ('bloodborne', 5, 'Gothic atmosphere, fast combat. No shield.'),
+  ('bloodborne', 4, '30fps on PS5 is a shame. Needs a remaster.'),
+  ('bloodborne', 5, 'Lady Maria is my favorite boss.'),
+  -- Breath of the Wild (3 reviews)
+  ('botw', 5, 'Revolutionized open worlds. Weapon durability is divisive.'),
+  ('botw', 4, 'The dungeons are weak compared to classic Zelda.'),
+  ('botw', 5, 'The sense of discovery is magical.'),
+  -- Tears of the Kingdom (3 reviews)
+  ('totk', 5, 'Ultrahand is a game-changer. Same map but feels new.'),
+  ('totk', 4, 'The depths are repetitive, but the sky islands are fun.'),
+  ('totk', 5, 'Building a tank is possible. So much creativity.'),
+  -- Super Mario Odyssey (3 reviews)
+  ('mario-odyssey', 5, 'Joyful from start to finish. Motion controls optional.'),
+  ('mario-odyssey', 4, 'Too many moons, some are filler.'),
+  ('mario-odyssey', 5, 'New Donk City festival is pure joy.'),
+  -- Spider-Man (2018) (3 reviews)
+  ('spiderman-ps4', 5, 'Best superhero game. Swinging feels perfect.'),
+  ('spiderman-ps4', 4, 'The stealth sections are weak.'),
+  ('spiderman-ps4', 5, 'The ending made me cry.'),
+  -- Horizon Zero Dawn (3 reviews)
+  ('horizon-zero-dawn', 4, 'Beautiful world, but side quests are generic.'),
+  ('horizon-zero-dawn', 5, 'Robot dinosaurs are awesome.'),
+  ('horizon-zero-dawn', 4, 'Aloy talks to herself too much.'),
+  -- Ghost of Tsushima (3 reviews)
+  ('ghost-tsushima', 5, 'Samurai fantasy done right. Wind navigation is genius.'),
+  ('ghost-tsushima', 4, 'The open world is beautiful but repetitive.'),
+  ('ghost-tsushima', 5, 'The duels are intense and cinematic.'),
+  -- Uncharted 4 (3 reviews)
+  ('uncharted-4', 5, 'Set pieces are insane. Story is a perfect send-off.'),
+  ('uncharted-4', 4, 'Too much climbing, not enough shooting.'),
+  ('uncharted-4', 5, 'The car chase scene is unforgettable.'),
+  -- Helldivers 2 (3 reviews)
+  ('helldivers-2', 5, 'Chaotic co-op fun. Friendly fire is hilarious.'),
+  ('helldivers-2', 4, 'Server issues at launch, but better now.'),
+  ('helldivers-2', 5, 'For Super Earth!'),
+  -- Palworld (3 reviews)
+  ('palworld', 4, 'Addictive but still early access. Performance issues.'),
+  ('palworld', 5, 'Pokémon with guns is as fun as it sounds.'),
+  ('palworld', 4, 'The grinding is real, but rewarding.'),
+  -- Hogwarts Legacy (3 reviews)
+  ('hogwarts-legacy', 4, 'Great castle, empty open world. Fun for Harry Potter fans.'),
+  ('hogwarts-legacy', 5, 'The room of requirement is a nice touch.'),
+  ('hogwarts-legacy', 4, 'The story is predictable, but the world is immersive.'),
+  -- Starfield (3 reviews)
+  ('starfield', 3, 'Disappointing for a Bethesda game. Too many loading screens.'),
+  ('starfield', 4, 'Ship building is fun, but exploration is shallow.'),
+  ('starfield', 3, 'The main quest is forgettable.'),
+  -- Lies of P (3 reviews)
+  ('lies-of-p', 5, 'Best non-FromSoft soulslike. Parry system is tight.'),
+  ('lies-of-p', 4, 'Some enemy placements are cheap.'),
+  ('lies-of-p', 5, 'The weapon assembly system is genius.'),
+  -- Armored Core VI (3 reviews)
+  ('armored-core-6', 5, 'Mech combat perfection. FromSoftware does it again.'),
+  ('armored-core-6', 4, 'The difficulty spikes are brutal.'),
+  ('armored-core-6', 5, 'Customization is deep and rewarding.'),
+  -- Final Fantasy XVI (3 reviews)
+  ('ff16', 4, 'Great story and Eikon battles, but side quests are MMO-tier.'),
+  ('ff16', 5, 'The combat is flashy and fun.'),
+  ('ff16', 4, 'Too much downtime between epic moments.'),
+  -- Street Fighter 6 (3 reviews)
+  ('sf6', 5, 'Best fighting game since SFII. Modern controls lower the barrier.'),
+  ('sf6', 4, 'The battle hub is weird but okay.'),
+  ('sf6', 5, 'Drive system is deep and rewarding.'),
+  -- Diablo IV (3 reviews)
+  ('diablo-4', 3, 'Campaign is fun, endgame is a grind.'),
+  ('diablo-4', 4, 'Season 4 improved a lot.'),
+  ('diablo-4', 3, 'Too many nerfs from Blizzard.'),
+  -- Alan Wake 2 (3 reviews)
+  ('alan-wake-2', 5, 'Mind-blowing storytelling and atmosphere. The musical level is GOTY.'),
+  ('alan-wake-2', 4, 'The jump scares are cheap, but the story is incredible.'),
+  ('alan-wake-2', 5, 'Remedy at their best.'),
+  -- Resident Evil 4 Remake (3 reviews)
+  ('re4-remake', 5, 'Perfect remake. Leon is iconic.'),
+  ('re4-remake', 4, 'The shooting range is addictive but frustrating.'),
+  ('re4-remake', 5, 'The village is still terrifying.'),
+  -- Dead Space Remake (3 reviews)
+  ('dead-space', 5, 'Faithful and terrifying. The Ishimura is still scary.'),
+  ('dead-space', 4, 'The intensity director keeps you on edge.'),
+  ('dead-space', 5, 'The plasma cutter is the best weapon.'),
+  -- Star Wars Jedi: Survivor (3 reviews)
+  ('jedi-survivor', 4, 'Great gameplay, but PC performance is rough.'),
+  ('jedi-survivor', 5, 'The stances add so much variety.'),
+  ('jedi-survivor', 4, 'The story is good, but the ending feels rushed.')
+) AS r(slug, rating, content) ON g.slug = r.slug
+ON CONFLICT DO NOTHING;
+
+-- 3. Add 20+ new comments for each game (using same user ID)
+WITH game_ids AS (SELECT id, slug FROM games)
+INSERT INTO comments (game_id, user_id, content)
+SELECT g.id, my_user_id, c.comment
+FROM game_ids g
+JOIN (VALUES
+  -- Elden Ring (4 comments)
+  ('elden-ring', 'Try finger, but hole.'),
+  ('elden-ring', 'The Lake of Rot is pure evil.'),
+  ('elden-ring', 'Malenia is the hardest boss I''ve ever fought.'),
+  ('elden-ring', 'The mimic tear is my best friend.'),
+  -- Baldur's Gate 3 (4 comments)
+  ('baldurs-gate-3', 'I accidentally killed the entire grove.'),
+  ('baldurs-gate-3', 'Karlach is best girl.'),
+  ('baldurs-gate-3', 'The owlbear cub is so cute.'),
+  ('baldurs-gate-3', 'I need more spell slots.'),
+  -- The Witcher 3 (4 comments)
+  ('witcher-3', 'Wind''s howling.'),
+  ('witcher-3', 'Place of power, gotta be.'),
+  ('witcher-3', 'I hate Roach.'),
+  ('witcher-3', 'Team Yennefer forever.'),
+  -- Hades (4 comments)
+  ('hades', 'There is no escape.'),
+  ('hades', 'Dusa is adorable.'),
+  ('hades', 'The final boss is so tough.'),
+  ('hades', 'I love the fishing mini-game.'),
+  -- RDR2 (4 comments)
+  ('rdr2', 'LENNY!'),
+  ('rdr2', 'I have a plan, Arthur.'),
+  ('rdr2', 'The horse mechanics are amazing.'),
+  ('rdr2', 'Micah is the worst.'),
+  -- Stardew Valley (4 comments)
+  ('stardew-valley', 'Pierre is a scammer.'),
+  ('stardew-valley', 'Abigail eats rocks.'),
+  ('stardew-valley', 'I married Sebastian.'),
+  ('stardew-valley', 'The community center is a pain.'),
+  -- GTA V (3 comments)
+  ('gta5', 'Ah shit, here we go again.'),
+  ('gta5', 'I still play story mode.'),
+  ('gta5', 'Franklin is my favorite.'),
+  -- The Last of Us Part II (3 comments)
+  ('last-of-us-2', 'I cried at the ending.'),
+  ('last-of-us-2', 'The museum flashback is perfect.'),
+  ('last-of-us-2', 'Abby''s gameplay is fun.'),
+  -- God of War (2018) (3 comments)
+  ('god-of-war-2018', 'BOY!'),
+  ('god-of-war-2018', 'The axe recall never gets old.'),
+  ('god-of-war-2018', 'Atreus is annoying at first.'),
+  -- Persona 5 Royal (3 comments)
+  ('persona-5-royal', 'I never saw it coming.'),
+  ('persona-5-royal', 'Morgana, let me go out at night.'),
+  ('persona-5-royal', 'The soundtrack is god-tier.'),
+  -- Disco Elysium (3 comments)
+  ('disco-elysium', 'I failed a check and died from a chair.'),
+  ('disco-elysium', 'The narrator''s voice is so soothing.'),
+  ('disco-elysium', 'I want to be a superstar cop.'),
+  -- Half-Life: Alyx (3 comments)
+  ('half-life-alyx', 'The Jeff level is the scariest thing in VR.'),
+  ('half-life-alyx', 'I threw a bottle at a combine.'),
+  ('half-life-alyx', 'The gravity gloves are amazing.'),
+  -- Outer Wilds (3 comments)
+  ('outer-wilds', 'Don''t look up anything.'),
+  ('outer-wilds', 'The music makes me emotional.'),
+  ('outer-wilds', 'I crashed into the sun so many times.'),
+  -- Sekiro (3 comments)
+  ('sekiro', 'Hesitation is defeat.'),
+  ('sekiro', 'I hate the guardian ape.'),
+  ('sekiro', 'The lightning reversal is so satisfying.'),
+  -- Mass Effect 2 (3 comments)
+  ('mass-effect-2', 'Garrus is my space bro.'),
+  ('mass-effect-2', 'I can''t believe I lost Tali.'),
+  ('mass-effect-2', 'The suicide mission is epic.'),
+  -- Portal 2 (3 comments)
+  ('portal-2', 'The potato battery part is hilarious.'),
+  ('portal-2', 'Cave Johnson quotes are gold.'),
+  ('portal-2', 'The co-op is so fun.'),
+  -- Minecraft (3 comments)
+  ('minecraft', 'First night is always scary.'),
+  ('minecraft', 'I fell into lava with diamonds.'),
+  ('minecraft', 'The creeper sound haunts me.'),
+  -- Resident Evil 2 Remake (3 comments)
+  ('re2-remake', 'Mr. X follows you everywhere.'),
+  ('re2-remake', 'The library puzzle is tough.'),
+  ('re2-remake', 'I used all my ammo on lickers.'),
+  -- Celeste (3 comments)
+  ('celeste', 'The farewell DLC is harder than the base game.'),
+  ('celeste', 'I died over 5000 times.'),
+  ('celeste', 'The story about anxiety is beautiful.'),
+  -- Hollow Knight (3 comments)
+  ('hollow-knight', 'Path of Pain is pure suffering.'),
+  ('hollow-knight', 'Zote is the strongest.'),
+  ('hollow-knight', 'The mantis lords fight is perfect.'),
+  -- Undertale (3 comments)
+  ('undertale', 'Sans is impossible.'),
+  ('undertale', 'Papyrus is the best.'),
+  ('undertale', 'I felt bad for Flowey.'),
+  -- Doom Eternal (3 comments)
+  ('doom-eternal', 'The Marauder is the worst enemy.'),
+  ('doom-eternal', 'Rip and tear until it is done.'),
+  ('doom-eternal', 'The platforming is annoying.'),
+  -- Control (3 comments)
+  ('control', 'The Ashtray Maze sequence is unforgettable.'),
+  ('control', 'I love the SCP vibes.'),
+  ('control', 'Jesse is a great protagonist.'),
+  -- Cyberpunk 2077 (3 comments)
+  ('cyberpunk-2077', 'Wake the fuck up, samurai.'),
+  ('cyberpunk-2077', 'I romanced Panam.'),
+  ('cyberpunk-2077', 'The city is beautiful at night.'),
+  -- Return of the Obra Dinn (3 comments)
+  ('obra-dinn', 'I felt like a genius after solving the last death.'),
+  ('obra-dinn', 'The art style hurts my eyes.'),
+  ('obra-dinn', 'I used a spreadsheet.'),
+  -- Factorio (3 comments)
+  ('factorio', 'The factory must grow.'),
+  ('factorio', 'I spent 100 hours on one save.'),
+  ('factorio', 'The biters are annoying.'),
+  -- Divinity: Original Sin 2 (3 comments)
+  ('divinity-os2', 'Barrelmancy is broken but fun.'),
+  ('divinity-os2', 'I accidentally killed my whole party.'),
+  ('divinity-os2', 'The music is amazing.'),
+  -- XCOM 2 (3 comments)
+  ('xcom-2', 'That 99% miss still haunts me.'),
+  ('xcom-2', 'I reloaded a save 10 times.'),
+  ('xcom-2', 'The chosen are tough.'),
+  -- Dark Souls III (3 comments)
+  ('dark-souls-3', 'Nameless King is the hardest boss.'),
+  ('dark-souls-3', 'Praise the sun!'),
+  ('dark-souls-3', 'I died to gravity again.'),
+  -- Metal Gear Solid V (3 comments)
+  ('mgs5', 'Quiet is a great companion.'),
+  ('mgs5', 'The phantom cigar is weird.'),
+  ('mgs5', 'I extracted everyone.'),
+  -- Bloodborne (3 comments)
+  ('bloodborne', 'Lady Maria is my favorite boss.'),
+  ('bloodborne', 'The orphan is impossible.'),
+  ('bloodborne', 'Fear the old blood.'),
+  -- Breath of the Wild (3 comments)
+  ('botw', 'The first time leaving the shrine is magical.'),
+  ('botw', 'I broke all my weapons.'),
+  ('botw', 'The korok seeds are a pain.'),
+  -- Tears of the Kingdom (3 comments)
+  ('totk', 'Building a tank is possible.'),
+  ('totk', 'The depths are creepy.'),
+  ('totk', 'Ultrahand is so creative.'),
+  -- Super Mario Odyssey (3 comments)
+  ('mario-odyssey', 'New Donk City festival is pure joy.'),
+  ('mario-odyssey', 'Cappy is a great mechanic.'),
+  ('mario-odyssey', 'I love the 2D sections.'),
+  -- Spider-Man (2018) (3 comments)
+  ('spiderman-ps4', 'The ending made me cry.'),
+  ('spiderman-ps4', 'Swinging feels perfect.'),
+  ('spiderman-ps4', 'The stealth is weak.'),
+  -- Horizon Zero Dawn (3 comments)
+  ('horizon-zero-dawn', 'Aloy is a great protagonist.'),
+  ('horizon-zero-dawn', 'The thunderjaw is awesome.'),
+  ('horizon-zero-dawn', 'The climbing is clunky.'),
+  -- Ghost of Tsushima (3 comments)
+  ('ghost-tsushima', 'The wind guiding you is genius.'),
+  ('ghost-tsushima', 'The duels are intense.'),
+  ('ghost-tsushima', 'I love the haiku spots.'),
+  -- Uncharted 4 (3 comments)
+  ('uncharted-4', 'The car chase scene is insane.'),
+  ('uncharted-4', 'The epilogue is perfect.'),
+  ('uncharted-4', 'I hate the puzzles.'),
+  -- Helldivers 2 (3 comments)
+  ('helldivers-2', 'For Super Earth!'),
+  ('helldivers-2', 'I killed my whole squad.'),
+  ('helldivers-2', 'The railgun is OP.'),
+  -- Palworld (3 comments)
+  ('palworld', 'The grinding is real.'),
+  ('palworld', 'I caught a human.'),
+  ('palworld', 'The base building is fun.'),
+  -- Hogwarts Legacy (3 comments)
+  ('hogwarts-legacy', 'The common rooms are so detailed.'),
+  ('hogwarts-legacy', 'I chose Slytherin.'),
+  ('hogwarts-legacy', 'The broom controls are weird.'),
+  -- Starfield (3 comments)
+  ('starfield', 'Outpost building is a letdown.'),
+  ('starfield', 'The loading screens are too many.'),
+  ('starfield', 'I like the ship builder.'),
+  -- Lies of P (3 comments)
+  ('lies-of-p', 'The perfect parry window is small.'),
+  ('lies-of-p', 'The puppet king is hard.'),
+  ('lies-of-p', 'The weapon assembly is cool.'),
+  -- Armored Core VI (3 comments)
+  ('armored-core-6', 'Balteus is impossible.'),
+  ('armored-core-6', 'The pile bunker is satisfying.'),
+  ('armored-core-6', 'I love customizing my mech.'),
+  -- Final Fantasy XVI (3 comments)
+  ('ff16', 'The Eikon fights are pure hype.'),
+  ('ff16', 'The side quests are boring.'),
+  ('ff16', 'Cid is the best character.'),
+  -- Street Fighter 6 (3 comments)
+  ('sf6', 'Modern controls are a game changer.'),
+  ('sf6', 'I main Jamie.'),
+  ('sf6', 'The drive system is deep.'),
+  -- Diablo IV (3 comments)
+  ('diablo-4', 'Season 4 might save it.'),
+  ('diablo-4', 'I miss the D2 itemization.'),
+  ('diablo-4', 'The campaign was fun.'),
+  -- Alan Wake 2 (3 comments)
+  ('alan-wake-2', 'The musical level is GOTY.'),
+  ('alan-wake-2', 'The jump scares got me every time.'),
+  ('alan-wake-2', 'Saga is a great character.'),
+  -- Resident Evil 4 Remake (3 comments)
+  ('re4-remake', 'The shooting range is addictive.'),
+  ('re4-remake', 'LEON!'),
+  ('re4-remake', 'The village is terrifying.'),
+  -- Dead Space Remake (3 comments)
+  ('dead-space', 'The audio logs are creepy.'),
+  ('dead-space', 'I stomp every body.'),
+  ('dead-space', 'The plasma cutter is iconic.'),
+  -- Star Wars Jedi: Survivor (3 comments)
+  ('jedi-survivor', 'Fast travel would be nice.'),
+  ('jedi-survivor', 'The double-bladed stance is best.'),
+  ('jedi-survivor', 'The performance is rough on PC.')
+) AS c(slug, comment) ON g.slug = c.slug
+ON CONFLICT DO NOTHING;
+
+END $$;

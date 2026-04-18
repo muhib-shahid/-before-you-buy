@@ -3,9 +3,27 @@ import { supabase } from './supabaseClient';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-export const getStreams = async () => {
+export const getStreams = async (filters = {}) => {
   try {
+    // Step 1: if searching by game name, get matching game IDs
+    let gameIds = null;
+    if (filters.search) {
+      const gameUrl = new URL(`${supabaseUrl}/rest/v1/games`);
+      gameUrl.searchParams.append('select', 'id');
+      gameUrl.searchParams.append('title', `ilike.%${filters.search}%`);
+      const gameResponse = await fetchWithToken(gameUrl.toString());
+      if (gameResponse && gameResponse.length) {
+        gameIds = gameResponse.map(g => g.id).join(',');
+      } else {
+        return { data: [], error: null };
+      }
+    }
+
+    // Step 2: fetch streams
     const url = new URL(`${supabaseUrl}/rest/v1/streams`);
+    if (gameIds) {
+      url.searchParams.append('game_id', `in.(${gameIds})`);
+    }
     url.searchParams.append('order', 'viewer_count.desc');
     const data = await fetchWithToken(url.toString());
     return { data, error: null };
@@ -14,6 +32,7 @@ export const getStreams = async () => {
   }
 };
 
+// The rest of the file remains exactly the same (getStreamById, CRUD)
 export const getStreamById = async (id) => {
   try {
     const url = new URL(`${supabaseUrl}/rest/v1/streams`);

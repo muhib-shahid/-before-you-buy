@@ -3,10 +3,15 @@ import { supabase } from './supabaseClient';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-export const getForumCategories = async () => {
+// ========== READ OPERATIONS ==========
+export const getForumCategories = async (filters = {}) => {
   try {
     const url = new URL(`${supabaseUrl}/rest/v1/forum_categories`);
-    url.searchParams.append('order', 'name.asc');
+    if (filters.search) {
+      url.searchParams.append('or', `(name.ilike.%${filters.search}%,description.ilike.%${filters.search}%)`);
+    }
+    const sortOrder = filters.sort === 'desc' ? 'name.desc' : 'name.asc';
+    url.searchParams.append('order', sortOrder);
     const data = await fetchWithToken(url.toString());
     return { data, error: null };
   } catch (error) {
@@ -52,39 +57,123 @@ export const getPostsByThread = async (threadId) => {
   }
 };
 
-// CRUD operations (use supabase client)
+// ========== CATEGORY CRUD (UUID compatible – no parseInt) ==========
 export const createCategory = async (category) => {
-  const { data, error } = await supabase.from('forum_categories').insert([category]).select().single();
-  if (error) throw error;
-  return { data, error: null };
+  const { data, error } = await supabase
+    .from('forum_categories')
+    .insert([category])
+    .select();
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('Failed to create category');
+  return { data: data[0], error: null };
 };
+
 export const updateCategory = async (id, updates) => {
-  const { data, error } = await supabase.from('forum_categories').update(updates).eq('id', id).select().single();
-  if (error) throw error;
-  return { data, error: null };
+  // id is UUID string – no conversion needed
+  const { data: existing, error: fetchError } = await supabase
+    .from('forum_categories')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (fetchError) throw new Error(fetchError.message);
+  if (!existing) throw new Error('Category not found');
+
+  const { data, error } = await supabase
+    .from('forum_categories')
+    .update(updates)
+    .eq('id', id)
+    .select();
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) {
+    return { data: existing, error: null };
+  }
+  return { data: data[0], error: null };
 };
+
 export const deleteCategory = async (id) => {
-  const { error } = await supabase.from('forum_categories').delete().eq('id', id);
-  if (error) throw error;
+  // 1. Get all thread IDs in this category
+  const { data: threads, error: threadFetchError } = await supabase
+    .from('forum_threads')
+    .select('id')
+    .eq('category_id', id);
+  if (threadFetchError) throw new Error(threadFetchError.message);
+
+  if (threads && threads.length > 0) {
+    const threadIds = threads.map(t => t.id);
+    // 2. Delete all posts in these threads
+    const { error: postsError } = await supabase
+      .from('forum_posts')
+      .delete()
+      .in('thread_id', threadIds);
+    if (postsError) throw new Error(postsError.message);
+    // 3. Delete all threads
+    const { error: threadsError } = await supabase
+      .from('forum_threads')
+      .delete()
+      .in('id', threadIds);
+    if (threadsError) throw new Error(threadsError.message);
+  }
+  // 4. Delete the category
+  const { error } = await supabase
+    .from('forum_categories')
+    .delete()
+    .eq('id', id);
+  if (error) throw new Error(error.message);
   return { error: null };
 };
+
+// ========== THREAD & POST CRUD (similar – use UUID as is) ==========
 export const createThread = async (thread) => {
-  const { data, error } = await supabase.from('forum_threads').insert([thread]).select().single();
-  if (error) throw error;
-  return { data, error: null };
+  const { data, error } = await supabase
+    .from('forum_threads')
+    .insert([thread])
+    .select();
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('Failed to create thread');
+  return { data: data[0], error: null };
 };
+
 export const updateThread = async (id, updates) => {
-  const { data, error } = await supabase.from('forum_threads').update(updates).eq('id', id).select().single();
-  if (error) throw error;
-  return { data, error: null };
+  const { data: existing, error: fetchError } = await supabase
+    .from('forum_threads')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (fetchError) throw new Error(fetchError.message);
+  if (!existing) throw new Error('Thread not found');
+
+  const { data, error } = await supabase
+    .from('forum_threads')
+    .update(updates)
+    .eq('id', id)
+    .select();
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) {
+    return { data: existing, error: null };
+  }
+  return { data: data[0], error: null };
 };
+
 export const deleteThread = async (id) => {
-  const { error } = await supabase.from('forum_threads').delete().eq('id', id);
-  if (error) throw error;
+  const { error: postsError } = await supabase
+    .from('forum_posts')
+    .delete()
+    .eq('thread_id', id);
+  if (postsError) throw new Error(postsError.message);
+  const { error } = await supabase
+    .from('forum_threads')
+    .delete()
+    .eq('id', id);
+  if (error) throw new Error(error.message);
   return { error: null };
 };
+
 export const createPost = async (post) => {
-  const { data, error } = await supabase.from('forum_posts').insert([post]).select().single();
-  if (error) throw error;
-  return { data, error: null };
+  const { data, error } = await supabase
+    .from('forum_posts')
+    .insert([post])
+    .select();
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('Failed to create post');
+  return { data: data[0], error: null };
 };

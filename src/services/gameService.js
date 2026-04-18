@@ -6,7 +6,8 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 export const getGames = async (filters = {}) => {
   try {
     const url = new URL(`${supabaseUrl}/rest/v1/games`);
-    if (filters.genre) url.searchParams.append('genres@>', `["${filters.genre}"]`);
+    // FIXED: Correct array containment syntax for Supabase
+    if (filters.genre) url.searchParams.append('genres', `cs.{"${filters.genre}"}`);
     if (filters.search) url.searchParams.append('title', `ilike.%${filters.search}%`);
     if (filters.limit) url.searchParams.append('limit', filters.limit);
     if (filters.comingSoon) url.searchParams.append('release_date', `gt.${new Date().toISOString().split('T')[0]}`);

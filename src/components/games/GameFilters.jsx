@@ -1,20 +1,18 @@
-import { useState } from 'react';
 // import './GameFilters.css';
 
-const GameFilters = ({ onFilterChange }) => {
-  const [search, setSearch] = useState('');
-  const [genre, setGenre] = useState('');
+// CHANGE the component to accept props instead of internal state
+const GameFilters = ({ search, genre, onFilterChange }) => { // CHANGE THIS LINE
+  // REMOVE the useState lines – DELETE BOTH
+  // const [search, setSearch] = useState('');  <-- DELETE
+  // const [genre, setGenre] = useState('');    <-- DELETE
 
+  // SIMPLIFY handlers – they now call onFilterChange directly
   const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearch(value);
-    onFilterChange({ search: value, genre });
+    onFilterChange({ search: e.target.value, genre });
   };
 
   const handleGenre = (e) => {
-    const value = e.target.value;
-    setGenre(value);
-    onFilterChange({ search, genre: value });
+    onFilterChange({ search, genre: e.target.value });
   };
 
   return (

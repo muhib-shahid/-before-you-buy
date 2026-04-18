@@ -1,24 +1,52 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getGuides, deleteGuide } from '../services/guideService';
 import { useAuth } from '../context/AuthContext';
 // import './Guides.css';
 
 const Guides = () => {
   const { user, isAdmin } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [inputValue, setInputValue] = useState(() => searchParams.get('search') || '');
+  const isFirstRender = useRef(true);
 
+  const urlSearch = searchParams.get('search') || '';
+
+  // Fetch guides when URL search changes
   useEffect(() => {
     const fetchGuides = async () => {
-      const { data, error } = await getGuides();
+      setLoading(true);
+      const filters = {};
+      if (urlSearch.trim()) filters.search = urlSearch;
+      const { data, error } = await getGuides(filters);
       setLoading(false);
       if (error) setError(error);
       else setGuides(data || []);
     };
     fetchGuides();
-  }, []);
+  }, [urlSearch]);
+
+  // Sync input when URL changes externally (e.g., back button)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setInputValue(urlSearch);
+  }, [urlSearch]);
+
+  const commitSearch = () => {
+    const newSearch = inputValue.trim();
+    const newParams = new URLSearchParams();
+    if (newSearch) newParams.set('search', newSearch);
+    setSearchParams(newParams);
+  };
+
+  const handleBlur = () => commitSearch();
+  const handleKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); commitSearch(); } };
 
   const handleDelete = async (id) => {
     if (window.confirm('Delete this guide?')) {
@@ -34,6 +62,17 @@ const Guides = () => {
   return (
     <div className="guides-page">
       <h1><i className="fas fa-book"></i> Game Guides</h1>
+      <div className="game-filters">
+        <input
+          type="text"
+          placeholder="Search guides by game name..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          className="filter-input"
+        />
+      </div>
       {user && (
         <Link to="/guides/new" className="btn-primary">
           <i className="fas fa-plus"></i> Write a Guide

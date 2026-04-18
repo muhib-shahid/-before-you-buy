@@ -5,7 +5,25 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
 export const getDeals = async (filters = {}) => {
   try {
+    // If search is provided, first get matching game IDs
+    let gameIds = null;
+    if (filters.search) {
+      const gameUrl = new URL(`${supabaseUrl}/rest/v1/games`);
+      gameUrl.searchParams.append('select', 'id');
+      gameUrl.searchParams.append('title', `ilike.%${filters.search}%`);
+      const gameResponse = await fetchWithToken(gameUrl.toString());
+      if (gameResponse && gameResponse.length) {
+        gameIds = gameResponse.map(g => g.id).join(',');
+      } else {
+        // No matching games -> return empty deals
+        return { data: [], error: null };
+      }
+    }
+
     const url = new URL(`${supabaseUrl}/rest/v1/deals`);
+    if (gameIds) {
+      url.searchParams.append('game_id', `in.(${gameIds})`);
+    }
     if (filters.store) url.searchParams.append('store', `eq.${filters.store}`);
     if (filters.activeOnly) url.searchParams.append('expires_at', `gt.${new Date().toISOString()}`);
     url.searchParams.append('order', 'created_at.desc');
