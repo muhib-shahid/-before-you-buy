@@ -54,7 +54,6 @@ const Calendar = () => {
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
           className="filter-input"
-          placeholder="Start date"
         />
 
         {/* End date */}
@@ -63,7 +62,6 @@ const Calendar = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
           className="filter-input"
-          placeholder="End date"
         />
       </div>
 
